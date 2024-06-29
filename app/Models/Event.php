@@ -84,24 +84,14 @@ class Event extends Model implements HasMedia
                 ->searchable(),
             TextInput::make('meeting_spot')
                 ->required(),
-//            FileUpload::make('featured_image')
-//                ->columnSpanFull()
-//                ->label('Featured Image')
-//                ->directory('featured_image')
-//                ->imageEditor()
-//                ->maxSize(1024 * 1024 * 10)
-//                ->imagePreviewHeight('250')
-//                ->loadingIndicatorPosition('left')
-//                ->panelAspectRatio('2:1')
-//                ->panelLayout('integrated')
-//                ->removeUploadedFileButtonPosition('right')
-//                ->uploadButtonPosition('left')
-//                ->uploadProgressIndicatorPosition('left'),
             SpatieMediaLibraryFileUpload::make('featured_image')
                 ->columnSpanFull()
                 ->collection('event-images')
                 ->multiple()
-                ->image(),
+                ->maxFiles(3)
+                ->reorderable()
+                ->appendFiles()
+                ->responsiveImages(),
             Actions::make([
                 Action::make('star')
                     ->label('Fill with Factory Data')
