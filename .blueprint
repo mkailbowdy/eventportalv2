@@ -1,0 +1,11 @@
+created:
+    - database/factories/EventFactory.php
+    - database/factories/GroupFactory.php
+    - database/migrations/2024_06_29_051812_create_events_table.php
+    - database/migrations/2024_06_29_051813_create_groups_table.php
+    - app/Models/Event.php
+    - app/Models/Group.php
+models:
+    User: { name: string, email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable' }
+    Event: { name: string, description: string, start_date: datetime, end_date: datetime, capacity: unsignedInteger, prefecture: string, meeting_spot: string, photo_path: 'nullable string', group_id: 'unsignedInteger nullable', relationships: { belongsTo: User } }
+    Group: { name: string, description: text, prefecture: string, photo_path: 'nullable string', relationships: { hasMany: Conference } }

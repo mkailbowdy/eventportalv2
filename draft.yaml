@@ -1,0 +1,21 @@
+models:
+  Event:
+    name: string
+    description: string
+    start_date: datetime
+    end_date: datetime
+    capacity: unsignedInteger
+    prefecture: string
+    meeting_spot: string
+    photo_path: nullable string
+    group_id: unsignedInteger nullable
+    relationships:
+      belongsTo: User
+
+  Group:
+    name: string
+    description: text
+    prefecture: string
+    photo_path: nullable string
+    relationships:
+      hasMany: Conference
