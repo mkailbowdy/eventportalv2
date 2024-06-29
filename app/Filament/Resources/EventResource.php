@@ -2,17 +2,13 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\Prefecture;
 use App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\EventResource\RelationManagers;
 use App\Models\Event;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EventResource extends Resource
 {
@@ -32,13 +28,13 @@ class EventResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('start_date')
-                    ->dateTime()
+//                Tables\Columns\TextColumn::make('description')
+//                    ->searchable(),
+                Tables\Columns\TextColumn::make('date')
+                    ->dateTime('M j, Y')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('end_date')
-                    ->dateTime()
+                Tables\Columns\TextColumn::make('start_time')
+                    ->dateTime('H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('capacity')
                     ->numeric()

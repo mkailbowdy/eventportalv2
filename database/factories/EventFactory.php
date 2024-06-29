@@ -21,15 +21,17 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        $startDate = now()->addMonths(9);
-        $endDate = now()->addMonths(9)->addDays(2);
+        $date = now()->addMonths(2);
+        $startTime = now()->addHours(1);
+        $endTime = now()->addHours(4);
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
             'category' => $this->faker->randomElement(Category::class),
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-            'capacity' => $this->faker->randomNumber(),
+            'date' => $date,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
+            'capacity' => $this->faker->numberBetween(1, 100),
             'prefecture' => $this->faker->randomElement(Prefecture::class),
             'meeting_spot' => $this->faker->word(),
             'photo_path' => "",

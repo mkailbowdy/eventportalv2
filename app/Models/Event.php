@@ -6,11 +6,12 @@ use App\Enums\Category;
 use App\Enums\Prefecture;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -22,23 +23,6 @@ class Event extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'description',
-        'start_date',
-        'end_date',
-        'capacity',
-        'prefecture',
-        'meeting_spot',
-        'photo_path',
-        'group_id',
-        'user_id',
-    ];
 
     /**
      * The attributes that should be cast to native types.
@@ -47,8 +31,9 @@ class Event extends Model implements HasMedia
      */
     protected $casts = [
         'id' => 'integer',
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
+        'date' => 'datetime',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
         'capacity' => 'integer',
         'group_id' => 'integer',
         'user_id' => 'integer',
@@ -71,11 +56,19 @@ class Event extends Model implements HasMedia
                 ->searchable(),
             TextInput::make('capacity')
                 ->required()
-                ->numeric(),
-            DateTimePicker::make('start_date')
-                ->required(),
-            DateTimePicker::make('end_date')
-                ->required(),
+                ->numeric()
+                ->maxValue(100),
+            DatePicker::make('date')
+                ->required()
+                ->minDate(now()),
+            TimePicker::make('start_time')
+                ->required()
+                ->native(false)
+                ->seconds(false),
+            TimePicker::make('end_time')
+                ->required()
+                ->native(false)
+                ->seconds(false),
             Select::make('prefecture')
                 ->required()
                 ->live()
