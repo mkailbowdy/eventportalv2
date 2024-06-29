@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\Prefecture;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,6 +46,41 @@ class Event extends Model
         'group_id' => 'integer',
         'user_id' => 'integer',
     ];
+
+    public static function getForm(): array
+    {
+        return [
+            TextInput::make('name')
+                ->required()
+                ->maxLength(255),
+            RichEditor::make('description')
+                ->required()
+                ->columnSpanFull(),
+            DateTimePicker::make('start_date')
+                ->required(),
+            DateTimePicker::make('end_date')
+                ->required(),
+            TextInput::make('capacity')
+                ->required()
+                ->numeric(),
+            Select::make('prefecture')
+                ->required()
+                ->live()
+                ->enum(Prefecture::class)
+                ->options(Prefecture::class)
+                ->searchable(),
+            TextInput::make('meeting_spot')
+                ->required()
+                ->maxLength(255),
+//                Forms\Components\TextInput::make('photo_path')
+//                    ->maxLength(255),
+//                Forms\Components\TextInput::make('group_id')
+//                    ->numeric(),
+//                Forms\Components\Select::make('user_id')
+//                    ->relationship('user', 'name')
+//                    ->required(),
+        ];
+    }
 
     public function user(): BelongsTo
     {
