@@ -4,10 +4,8 @@ namespace Database\Factories;
 
 use App\Enums\Category;
 use App\Enums\Prefecture;
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Event;
-use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EventFactory extends Factory
 {
@@ -23,12 +21,14 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
+        $startDate = now()->addMonths(9);
+        $endDate = now()->addMonths(9)->addDays(2);
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
             'category' => $this->faker->randomElement(Category::class),
-            'start_date' => $this->faker->dateTime(),
-            'end_date' => $this->faker->dateTime(),
+            'start_date' => $startDate,
+            'end_date' => $endDate,
             'capacity' => $this->faker->randomNumber(),
             'prefecture' => $this->faker->randomElement(Prefecture::class),
             'meeting_spot' => $this->faker->word(),

@@ -86,6 +86,7 @@ class Event extends Model implements HasMedia
                 ->required(),
             SpatieMediaLibraryFileUpload::make('featured_image')
                 ->columnSpanFull()
+                ->imageEditor()
                 ->collection('event-images')
                 ->multiple()
                 ->maxFiles(3)
