@@ -7,17 +7,20 @@ use App\Enums\Prefecture;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Event extends Model
+class Event extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -81,19 +84,24 @@ class Event extends Model
                 ->searchable(),
             TextInput::make('meeting_spot')
                 ->required(),
-            FileUpload::make('featured_image')
+//            FileUpload::make('featured_image')
+//                ->columnSpanFull()
+//                ->label('Featured Image')
+//                ->directory('featured_image')
+//                ->imageEditor()
+//                ->maxSize(1024 * 1024 * 10)
+//                ->imagePreviewHeight('250')
+//                ->loadingIndicatorPosition('left')
+//                ->panelAspectRatio('2:1')
+//                ->panelLayout('integrated')
+//                ->removeUploadedFileButtonPosition('right')
+//                ->uploadButtonPosition('left')
+//                ->uploadProgressIndicatorPosition('left'),
+            SpatieMediaLibraryFileUpload::make('featured_image')
                 ->columnSpanFull()
-                ->label('Featured Image')
-                ->directory('featured_image')
-                ->imageEditor()
-                ->maxSize(1024 * 1024 * 10)
-                ->imagePreviewHeight('250')
-                ->loadingIndicatorPosition('left')
-                ->panelAspectRatio('2:1')
-                ->panelLayout('integrated')
-                ->removeUploadedFileButtonPosition('right')
-                ->uploadButtonPosition('left')
-                ->uploadProgressIndicatorPosition('left'),
+                ->collection('event-images')
+                ->multiple()
+                ->image(),
             Actions::make([
                 Action::make('star')
                     ->label('Fill with Factory Data')
