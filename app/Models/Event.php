@@ -57,13 +57,6 @@ class Event extends Model
             TextInput::make('name')
                 ->required()
                 ->maxLength(255),
-            FileUpload::make('featured_image')
-//                ->image()
-                ->columnSpanFull()
-                ->label('Featured Image')
-                ->directory('featured_image')
-                ->imageEditor()
-                ->maxSize(1024 * 1024 * 10),
             MarkdownEditor::make('description')
                 ->required()
                 ->columnSpanFull(),
@@ -88,6 +81,19 @@ class Event extends Model
                 ->searchable(),
             TextInput::make('meeting_spot')
                 ->required(),
+            FileUpload::make('featured_image')
+                ->columnSpanFull()
+                ->label('Featured Image')
+                ->directory('featured_image')
+                ->imageEditor()
+                ->maxSize(1024 * 1024 * 10)
+                ->imagePreviewHeight('250')
+                ->loadingIndicatorPosition('left')
+                ->panelAspectRatio('2:1')
+                ->panelLayout('integrated')
+                ->removeUploadedFileButtonPosition('right')
+                ->uploadButtonPosition('left')
+                ->uploadProgressIndicatorPosition('left'),
             Actions::make([
                 Action::make('star')
                     ->label('Fill with Factory Data')
@@ -96,6 +102,7 @@ class Event extends Model
                         $data = Event::factory()->make()->toArray();
                         $livewire->form->fill($data);
                     }),
+
             ]),
         ];
     }
