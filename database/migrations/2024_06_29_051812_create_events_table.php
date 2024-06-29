@@ -15,14 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
+            $table->string('category');
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->unsignedInteger('capacity');
             $table->string('prefecture');
             $table->string('meeting_spot');
-            $table->string('photo_path')->nullable();
+            $table->text('featured_image')->nullable();
             $table->unsignedInteger('group_id')->nullable();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->timestamps();
         });
     }

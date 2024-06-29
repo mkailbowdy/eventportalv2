@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Category;
 use App\Enums\Prefecture;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -25,6 +26,7 @@ class EventFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
+            'category' => $this->faker->randomElement(Category::class),
             'start_date' => $this->faker->dateTime(),
             'end_date' => $this->faker->dateTime(),
             'capacity' => $this->faker->randomNumber(),
@@ -32,7 +34,7 @@ class EventFactory extends Factory
             'meeting_spot' => $this->faker->word(),
             'photo_path' => "",
             'group_id' => $this->faker->randomNumber(),
-            'user_id' => User::factory(),
+            'user_id' => null,
         ];
     }
 }

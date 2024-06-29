@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\Category;
 use App\Enums\Prefecture;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,16 +57,29 @@ class Event extends Model
             TextInput::make('name')
                 ->required()
                 ->maxLength(255),
-            RichEditor::make('description')
+            FileUpload::make('featured_image')
+//                ->image()
+                ->columnSpanFull()
+                ->label('Featured Image')
+                ->directory('featured_image')
+                ->imageEditor()
+                ->maxSize(1024 * 1024 * 10),
+            MarkdownEditor::make('description')
                 ->required()
                 ->columnSpanFull(),
+            Select::make('category')
+                ->required()
+                ->live()
+                ->enum(Category::class)
+                ->options(Category::class)
+                ->searchable(),
+            TextInput::make('capacity')
+                ->required()
+                ->numeric(),
             DateTimePicker::make('start_date')
                 ->required(),
             DateTimePicker::make('end_date')
                 ->required(),
-            TextInput::make('capacity')
-                ->required()
-                ->numeric(),
             Select::make('prefecture')
                 ->required()
                 ->live()
@@ -70,15 +87,16 @@ class Event extends Model
                 ->options(Prefecture::class)
                 ->searchable(),
             TextInput::make('meeting_spot')
-                ->required()
-                ->maxLength(255),
-//                Forms\Components\TextInput::make('photo_path')
-//                    ->maxLength(255),
-//                Forms\Components\TextInput::make('group_id')
-//                    ->numeric(),
-//                Forms\Components\Select::make('user_id')
-//                    ->relationship('user', 'name')
-//                    ->required(),
+                ->required(),
+            Actions::make([
+                Action::make('star')
+                    ->label('Fill with Factory Data')
+                    ->icon('heroicon-m-star')
+                    ->action(function ($livewire) {
+                        $data = Event::factory()->make()->toArray();
+                        $livewire->form->fill($data);
+                    }),
+            ]),
         ];
     }
 
