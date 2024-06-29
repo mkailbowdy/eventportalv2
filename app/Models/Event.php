@@ -7,7 +7,8 @@ use App\Enums\Prefecture;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -15,6 +16,7 @@ use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\HtmlString;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -42,54 +44,89 @@ class Event extends Model implements HasMedia
     public static function getForm(): array
     {
         return [
-            TextInput::make('name')
-                ->required()
-                ->maxLength(255),
-            MarkdownEditor::make('description')
-                ->required()
-                ->columnSpanFull(),
-            Select::make('category')
-                ->required()
-                ->live()
-                ->enum(Category::class)
-                ->options(Category::class)
-                ->searchable(),
-            TextInput::make('capacity')
-                ->required()
-                ->numeric()
-                ->maxValue(100),
-            DatePicker::make('date')
-                ->required()
-                ->minDate(now()),
-            TimePicker::make('start_time')
-                ->required()
-                ->native(false)
-                ->seconds(false),
-            TimePicker::make('end_time')
-                ->required()
-                ->native(false)
-                ->seconds(false),
-            Select::make('prefecture')
-                ->required()
-                ->live()
-                ->enum(Prefecture::class)
-                ->options(Prefecture::class)
-                ->searchable(),
-            TextInput::make('meeting_spot')
-                ->required(),
-            SpatieMediaLibraryFileUpload::make('featured_image')
-                ->columnSpanFull()
-                ->imageEditor()
-                ->collection('event-images')
-                ->multiple()
-                ->maxFiles(3)
-                ->reorderable()
-                ->appendFiles()
-                ->responsiveImages(),
+            Section::make('Event')
+                ->description('Prevent abuse by limiting the number of requests per period')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('name')
+                        ->required()
+                        ->maxLength(255),
+                    RichEditor::make('description')
+                        ->required()
+                        ->columnSpanFull(),
+                    Select::make('category')
+                        ->required()
+                        ->helperText(new HtmlString('Choose the category that <strong>best</strong> describes this event'))
+                        ->live()
+                        ->enum(Category::class)
+                        ->options(Category::class)
+                        ->searchable(),
+                    TextInput::make('capacity')
+                        ->required()
+                        ->helperText(new HtmlString('The <strong>max</strong> number of people that may attend'))
+                        ->numeric()
+                        ->maxValue(100),
+
+                ]),
+            Section::make('When')
+                ->description('Prevent abuse by limiting the number of requests per period')
+                ->columns(3)
+                ->schema([
+                    DatePicker::make('date')
+                        ->required()
+                        ->minDate(now()),
+                    TimePicker::make('start_time')
+                        ->required()
+                        ->native(false)
+                        ->seconds(false),
+                    TimePicker::make('end_time')
+                        ->required()
+                        ->native(false)
+                        ->seconds(false),
+                ]),
+
+            Section::make('Where')
+                ->description('Prevent abuse by limiting the number of requests per period')
+                ->columns(2)
+                ->schema([
+                    TextInput::make('meeting_spot')
+                        ->required()
+                        ->columnSpanFull()
+                        ->hint(new HtmlString('<a href="/maps">Get the address using our <strong>Google Maps</strong> feature!</a>'))
+                        ->helperText(new HtmlString('e.g. Osaka Castle, 1-1 Osakajo, Chuo Ward, Osaka, 540-0002')),
+                    Select::make('prefecture')
+                        ->required()
+                        ->live()
+                        ->enum(Prefecture::class)
+                        ->options(Prefecture::class)
+                        ->searchable(),
+                ]),
+            Section::make('Photos and Files')
+                ->description('Prevent abuse by limiting the number of requests per period')
+                ->schema([
+                    SpatieMediaLibraryFileUpload::make('featured_image')
+                        ->columnSpanFull()
+                        ->imageEditor()
+                        ->collection('event-images')
+                        ->multiple()
+                        ->maxFiles(3)
+                        ->reorderable()
+                        ->appendFiles()
+                        ->responsiveImages(),
+                ]),
             Actions::make([
                 Action::make('star')
                     ->label('Fill with Factory Data')
                     ->icon('heroicon-m-star')
+                    ->visible(function (string $operation) {
+                        if ($operation !== 'create') {
+                            return false;
+                        }
+                        if (!app()->environment('local')) {
+                            return false;
+                        }
+                        return true;
+                    })
                     ->action(function ($livewire) {
                         $data = Event::factory()->make()->toArray();
                         $livewire->form->fill($data);
