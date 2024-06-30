@@ -2,12 +2,15 @@ models:
   Event:
     name: string
     description: string
-    start_date: datetime
-    end_date: datetime
+    category: string
+    date: datetime
+    start_time: datetime
+    end_time: datetime
     capacity: unsignedInteger
+    participants: unsignedInteger nullable
     prefecture: string
     meeting_spot: string
-    photo_path: nullable string
+    images: text nullable
     group_id: unsignedInteger nullable
     relationships:
       belongsTo: User

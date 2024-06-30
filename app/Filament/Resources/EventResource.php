@@ -43,7 +43,7 @@ class EventResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('meeting_spot')
                     ->searchable(),
-//                Tables\Columns\TextColumn::make('photo_path')
+//                Tables\Columns\TextColumn::make('images')
 //                    ->searchable(),
 //                Tables\Columns\TextColumn::make('group_id')
 //                    ->numeric()

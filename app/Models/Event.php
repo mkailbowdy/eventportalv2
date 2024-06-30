@@ -77,10 +77,12 @@ class Event extends Model implements HasMedia
                         ->minDate(now()),
                     TimePicker::make('start_time')
                         ->required()
+                        ->helperText(new HtmlString('Use 24-hour format, e.g., 00:00 (midnight) to 23:59'))
                         ->native(false)
                         ->seconds(false),
                     TimePicker::make('end_time')
                         ->required()
+                        ->helperText(new HtmlString('Use 24-hour format, e.g., 00:00 (midnight) to 23:59'))
                         ->native(false)
                         ->seconds(false),
                 ]),
@@ -104,7 +106,7 @@ class Event extends Model implements HasMedia
             Section::make('Photos and Files')
                 ->description('Prevent abuse by limiting the number of requests per period')
                 ->schema([
-                    SpatieMediaLibraryFileUpload::make('featured_image')
+                    SpatieMediaLibraryFileUpload::make('images')
                         ->columnSpanFull()
                         ->imageEditor()
                         ->collection('event-images')
