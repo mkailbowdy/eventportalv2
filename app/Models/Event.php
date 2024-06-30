@@ -16,6 +16,8 @@ use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -45,7 +47,7 @@ class Event extends Model implements HasMedia
     {
         return [
             Section::make('Event')
-                ->description('Prevent abuse by limiting the number of requests per period')
+                ->description(new HtmlString('Please be sure to read <a href="/"><strong>Event Post Guidelines</strong></a> before uploading an event.'))
                 ->columns(2)
                 ->schema([
                     TextInput::make('name')
@@ -66,10 +68,16 @@ class Event extends Model implements HasMedia
                         ->helperText(new HtmlString('The <strong>max</strong> number of people that may attend'))
                         ->numeric()
                         ->maxValue(100),
+                    TextInput::make('user_id')
+                        ->columnSpanFull()
+                        ->label('Your User ID')
+                        ->hint(new HtmlString('This will not be shown to the public'))
+                        ->default(Auth::user()->id)
+                        ->disabled()
+                        ->dehydrated(),
 
                 ]),
             Section::make('When')
-                ->description('Prevent abuse by limiting the number of requests per period')
                 ->columns(3)
                 ->schema([
                     DatePicker::make('date')
@@ -88,7 +96,6 @@ class Event extends Model implements HasMedia
                 ]),
 
             Section::make('Where')
-                ->description('Prevent abuse by limiting the number of requests per period')
                 ->columns(2)
                 ->schema([
                     TextInput::make('meeting_spot')
@@ -104,7 +111,7 @@ class Event extends Model implements HasMedia
                         ->searchable(),
                 ]),
             Section::make('Photos and Files')
-                ->description('Prevent abuse by limiting the number of requests per period')
+                ->description('Three (3) images max. The Image Editor can be accessed by clicking the pencil icon.')
                 ->schema([
                     SpatieMediaLibraryFileUpload::make('images')
                         ->columnSpanFull()
@@ -131,6 +138,7 @@ class Event extends Model implements HasMedia
                     })
                     ->action(function ($livewire) {
                         $data = Event::factory()->make()->toArray();
+                        $data['user_id'] = Auth::id();
                         $livewire->form->fill($data);
                     }),
 
@@ -138,9 +146,9 @@ class Event extends Model implements HasMedia
         ];
     }
 
-    public function user(): BelongsTo
+    public function users(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function group(): BelongsTo

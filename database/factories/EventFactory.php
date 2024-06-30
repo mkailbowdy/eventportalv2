@@ -24,6 +24,7 @@ class EventFactory extends Factory
         $date = now()->addMonths(2);
         $startTime = now()->addHours(1);
         $endTime = now()->addHours(4);
+
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
