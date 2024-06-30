@@ -148,7 +148,9 @@ class Event extends Model implements HasMedia
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class);
+        // if we dont add withPivot, we can only get the user_id and event_id, but not participation
+        return $this->belongsToMany(User::class)
+            ->withPivot(['participation_status']);
     }
 
     public function group(): BelongsTo
