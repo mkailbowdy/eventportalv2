@@ -142,4 +142,10 @@ class Event extends Model implements HasMedia
     {
         return $this->belongsTo(User::class);
     }
+
+    public function group(): BelongsTo
+    {
+        return $this->belongsTo(Group::class);
+    }
+
 }

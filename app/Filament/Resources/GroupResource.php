@@ -22,7 +22,19 @@ class GroupResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema(Group::getForm());
+            ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('description')
+                    ->required()
+                    ->columnSpanFull(),
+                Forms\Components\TextInput::make('prefecture')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\Textarea::make('images')
+                    ->columnSpanFull(),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -32,8 +44,6 @@ class GroupResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('prefecture')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('photo_path')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

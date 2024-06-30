@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('prefecture');
-            $table->string('photo_path')->nullable();
+            $table->text('images')->nullable();
             $table->timestamps();
         });
     }

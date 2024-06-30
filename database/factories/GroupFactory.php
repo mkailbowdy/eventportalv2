@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\Prefecture;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Group;
@@ -24,8 +23,8 @@ class GroupFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
-            'prefecture' => $this->faker->randomElement(Prefecture::class),
-            'photo_path' => '',
+            'prefecture' => $this->faker->word(),
+            'images' => $this->faker->text(),
         ];
     }
 }

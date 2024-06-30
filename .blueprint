@@ -1,5 +1,8 @@
-created: 'database/factories/EventFactory.php database/factories/GroupFactory.php database/migrations/2024_06_29_051812_create_events_table.php database/migrations/2024_06_29_051813_create_groups_table.php app/Models/Event.php app/Models/Group.php'
+created:
+    - database/factories/GroupFactory.php
+    - database/migrations/2024_06_30_075000_create_groups_table.php
+    - app/Models/Group.php
 models:
     Event: { name: string, description: string, category: string, date: datetime, start_time: datetime, end_time: datetime, capacity: 'integer unsigned', participants: 'integer unsigned nullable', prefecture: string, meeting_spot: string, images: 'text nullable', group_id: 'integer unsigned nullable', user_id: 'biginteger unsigned nullable' }
-    Group: { name: string, description: text, prefecture: string, photo_path: 'string nullable' }
     User: { name: string, email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable' }
+    Group: { name: string, description: text, prefecture: string, images: 'text nullable', relationships: { hasMany: Event } }
