@@ -36,7 +36,6 @@ class EventFactory extends Factory
             'participants' => null,
             'prefecture' => $this->faker->randomElement(Prefecture::class),
             'meeting_spot' => $this->faker->word(),
-            'images' => "",
             'group_id' => $this->faker->randomNumber(),
             'user_id' => null,
         ];

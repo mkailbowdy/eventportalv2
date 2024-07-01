@@ -22,7 +22,6 @@ return new class extends Migration {
             $table->unsignedInteger('participants')->nullable();
             $table->string('prefecture');
             $table->string('meeting_spot');
-            $table->text('images')->nullable();
 //            $table->unsignedInteger('group_id')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->timestamps();
