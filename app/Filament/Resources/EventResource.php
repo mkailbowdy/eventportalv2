@@ -35,10 +35,9 @@ class EventResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('featured_image')
-                    ->square()->size(200),
+                    ->label(false)
+                    ->square()->height(150)->width(100),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('category')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('date')
                     ->dateTime('M j, Y')
@@ -46,21 +45,6 @@ class EventResource extends Resource
                 Tables\Columns\TextColumn::make('start_time')
                     ->dateTime('H:i')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('capacity')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('prefecture')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('meeting_spot')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('prefecture')
@@ -70,17 +54,20 @@ class EventResource extends Resource
                     ->options(Category::class)
                     ->multiple()
             ], layout: FiltersLayout::AboveContent)
+            ->hiddenFilterIndicators()
             ->persistFiltersInSession()
             ->filtersFormColumns(2)
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make()
+                Tables\Actions\deleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+            ->searchable(false);
+//            ->bulkActions([
+//                Tables\Actions\BulkActionGroup::make([
+//                    Tables\Actions\DeleteBulkAction::make(),
+//                ]),
+//            ]);
     }
 
     public static function infolist(Infolist $infolist): Infolist
@@ -108,8 +95,8 @@ class EventResource extends Resource
                         TextEntry::make('description')
                             ->html()
                             ->columnSpanFull(),
-                        TextEntry::make('meeting_spot')
-                            ->columnSpanFull(),
+                        TextEntry::make('meeting_spot'),
+                        TextEntry::make('prefecture'),
                         TextEntry::make('category'),
                         TextEntry::make('capacity'),
                     ]),
