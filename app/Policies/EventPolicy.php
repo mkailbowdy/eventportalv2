@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Event;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class EventPolicy
 {
@@ -23,13 +24,14 @@ class EventPolicy
         return true;
     }
 //
-//    /**
-//     * Determine whether the user can create models.
-//     */
-//    public function create(User $user): bool
-//    {
-//        //
-//    }
+
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
+    {
+        return Auth::check();
+    }
 
     /**
      * Determine whether the user can update the model.
