@@ -38,14 +38,17 @@ class EventResource extends Resource
                     ->label(false)
                     ->square()->height(150)->width(100),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->wrap()
+                    ->limit(100),
                 Tables\Columns\TextColumn::make('date')
-                    ->dateTime('M j, Y')
-                    ->sortable(),
+                    ->dateTime('M j, Y'),
+//                    ->sortable(),
                 Tables\Columns\TextColumn::make('start_time')
-                    ->dateTime('H:i')
-                    ->sortable(),
+                    ->dateTime('H:i'),
+//                    ->sortable(),
             ])
+            ->defaultSort('date', 'start_time')
             ->filters([
                 Tables\Filters\SelectFilter::make('prefecture')
                     ->options(Prefecture::class)
