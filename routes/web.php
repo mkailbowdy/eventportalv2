@@ -1,6 +1,6 @@
 <?php
 
-use App\Livewire\EventIndex;
+use App\Livewire\Events\ListEvents;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/events', EventIndex::class)->name('events.index');
+Route::get('/events', ListEvents::class)->name('events.index');

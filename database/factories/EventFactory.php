@@ -38,6 +38,7 @@ class EventFactory extends Factory
             'meeting_spot' => $this->faker->word(),
             'group_id' => $this->faker->randomNumber(),
             'user_id' => null,
+            'images' => null,
         ];
     }
 }

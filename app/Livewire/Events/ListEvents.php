@@ -1,33 +1,26 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Livewire\Events;
 
-use App\Enums\Category;
-use App\Enums\Prefecture;
-use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\EventResource\RelationManagers;
 use App\Models\Event;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Tables;
-use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Contracts\View\View;
+use Livewire\Component;
 
-class EventResource extends Resource
+class ListEvents extends Component implements HasForms, HasTable
 {
-    protected static ?string $model = Event::class;
+    use InteractsWithForms;
+    use InteractsWithTable;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema(Event::getForm());
-    }
-
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
+            ->query(Event::query())
             ->columns([
                 Tables\Columns\ImageColumn::make('featured_image')
                     ->square()->size(200),
@@ -66,41 +59,20 @@ class EventResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-//                Tables\Filters\SelectFilter::make('prefecture')
-//                    ->options(Prefecture::class)
-//                    ->multiple(),
-                Tables\Filters\SelectFilter::make('prefecture')
-                    ->options(Prefecture::class)
-                    ->multiple(),
-                Tables\Filters\SelectFilter::make('category')
-                    ->options(Category::class)
-                    ->multiple()
-            ], layout: FiltersLayout::AboveContent)
-            ->persistFiltersInSession()
-            ->filtersFormColumns(2)
+                //
+            ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                //
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //
                 ]),
             ]);
     }
 
-    public static function getRelations(): array
+    public function render(): View
     {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListEvents::route('/'),
-            'create' => Pages\CreateEvent::route('/create'),
-            'edit' => Pages\EditEvent::route('/{record}/edit'),
-        ];
+        return view('livewire.events.list-events');
     }
 }

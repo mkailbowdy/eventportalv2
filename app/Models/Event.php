@@ -7,10 +7,10 @@ use App\Enums\Prefecture;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +41,7 @@ class Event extends Model implements HasMedia
         'capacity' => 'integer',
         'group_id' => 'integer',
         'user_id' => 'integer',
+        'event_gallery' => 'array'
     ];
 
     public static function getForm(): array
@@ -110,18 +111,21 @@ class Event extends Model implements HasMedia
                         ->options(Prefecture::class)
                         ->searchable(),
                 ]),
-            Section::make('Photos and Files')
-                ->description('Three (3) images max. The Image Editor can be accessed by clicking the pencil icon.')
+            Section::make('Photos')
+                ->description('Need to make some quick adjustments to your images? Try out the Image Editor by pressing the pencil icon!')
                 ->schema([
-                    SpatieMediaLibraryFileUpload::make('images')
-                        ->columnSpanFull()
+                    FileUpload::make('featured_image')
+                        ->directory('event_images')
+                        ->helperText('The image that will be shown on the Event listings page')
                         ->imageEditor()
-                        ->collection('event-images')
+                        ->maxSize(1024 * 1024 * 10),
+                    FileUpload::make('event_gallery')
+                        ->directory('event_images')
+                        ->helperText('Upload up to 3 additional images')
                         ->multiple()
+                        ->imageEditor()
                         ->maxFiles(3)
-                        ->reorderable()
-                        ->appendFiles()
-                        ->responsiveImages(),
+                        ->maxSize(1024 * 1024 * 10),
                 ]),
             Actions::make([
                 Action::make('star')
