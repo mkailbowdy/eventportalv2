@@ -73,7 +73,7 @@ class Event extends Model implements HasMedia
                         ->columnSpanFull()
                         ->label('Your User ID')
                         ->hint(new HtmlString('This will not be shown to the public'))
-                        ->default(Auth::user()->id)
+                        ->default(Auth::check() ? Auth::user()->id : 0)
                         ->disabled()
                         ->dehydrated(),
 
