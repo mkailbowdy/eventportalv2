@@ -106,8 +106,8 @@ class EventResource extends Resource
                         TextEntry::make('prefecture'),
                         TextEntry::make('category'),
                         TextEntry::make('capacity'),
-                        TextEntry::make('participation_status')
-                            ->label('Participation Status'),
+//                        TextEntry::make('participation_status')
+//                            ->label('Participation Status'),
                         TextEntry::make('participants_count')
                             ->label('Total Participants'),
                     ]),

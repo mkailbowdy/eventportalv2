@@ -150,9 +150,15 @@ class Event extends Model implements HasMedia
         ];
     }
 
-    public static function goingOrNot(Event $event): void
+    public static function goingOrNot(Event $event)
     {
+        if (!Auth::check()) {
+            return redirect('/dashboard');
+        }
         $userId = Auth::id();
+//        if (!$userId) {
+//            redirect('/dashboard');
+//        }
         // add to event user table
         $event->users()->syncWithoutDetaching([$userId]);
 
