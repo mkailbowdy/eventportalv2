@@ -150,11 +150,42 @@ class Event extends Model implements HasMedia
         ];
     }
 
+    public static function goingOrNot(Event $event): void
+    {
+        $userId = Auth::id();
+        // add to event user table
+        $event->users()->syncWithoutDetaching([$userId]);
+
+        $participant = $event->users()->where('users.id', $userId)->first();
+
+        // Toggle the participation status
+        $newStatus = !$participant || !$participant->pivot->participation_status;
+        $event->users()->updateExistingPivot($userId, ['participation_status' => $newStatus]);
+
+    }
+
     public function users(): BelongsToMany
     {
         // if we dont add withPivot, we can only get the user_id and event_id, but not participation
         return $this->belongsToMany(User::class)
             ->withPivot(['participation_status']);
+    }
+
+    public function getParticipationStatusAttribute()
+    {
+        // Assuming there's a currently authenticated user
+        $user = auth()->user();
+
+        // Get the pivot row for the current user
+        $pivot = $this->users()->where('user_id', $user->id)->first()?->pivot;
+
+        // Return the participation status
+        return $pivot?->participation_status ?? 'Not Participating';
+    }
+
+    public function getParticipantsCountAttribute()
+    {
+        return $this->users()->wherePivot('participation_status', 1)->count();
     }
 
     public function group(): BelongsTo

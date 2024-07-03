@@ -25,7 +25,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->id('admin')
-            ->path('account')
+            ->path('dashboard')
             ->login()
             ->registration()
             ->passwordReset()

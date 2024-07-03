@@ -84,9 +84,10 @@ class EventResource extends Resource
                     ->columnSpanFull()
                     ->label(false)
                     ->footerActions([
-                        Action::make('I want to join!')
-                            ->action(function () {
-                                // ...
+                        Action::make('join')
+                            ->label('I want to join!')
+                            ->action(function (Event $event) {
+                                Event::goingOrNot($event);
                             }),
                     ])
                     ->columns(2)
@@ -105,6 +106,10 @@ class EventResource extends Resource
                         TextEntry::make('prefecture'),
                         TextEntry::make('category'),
                         TextEntry::make('capacity'),
+                        TextEntry::make('participation_status')
+                            ->label('Participation Status'),
+                        TextEntry::make('participants_count')
+                            ->label('Total Participants'),
                     ]),
                 Section::make('When')
                     ->columns(3)

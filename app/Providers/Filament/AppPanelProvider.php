@@ -61,7 +61,7 @@ class AppPanelProvider extends PanelProvider
             ])
             ->navigationItems([
                 NavigationItem::make('Dashboard')
-                    ->url('/account')
+                    ->url('/dashboard')
                     ->icon('heroicon-o-home'),
             ]);
     }
