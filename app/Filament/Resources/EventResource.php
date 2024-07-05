@@ -92,7 +92,6 @@ class EventResource extends Resource
                     ])
                     ->columns(2)
                     ->schema([
-
                         TextEntry::make('name'),
                         ImageEntry::make('featured_image')
                             ->label(false)

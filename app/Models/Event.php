@@ -156,9 +156,6 @@ class Event extends Model implements HasMedia
             return redirect('/dashboard');
         }
         $userId = Auth::id();
-//        if (!$userId) {
-//            redirect('/dashboard');
-//        }
         // add to event user table
         $event->users()->syncWithoutDetaching([$userId]);
 
