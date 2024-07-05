@@ -8,6 +8,7 @@ use App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\EventResource\RelationManagers;
 use App\Models\Event;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Actions;
 use Filament\Infolists\Components\Actions\Action;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Infolist;
@@ -85,7 +86,7 @@ class EventResource extends Resource
                     ->label(false)
                     ->footerActions([
                         Action::make('join')
-                            ->label('I want to join!')
+                            ->label('Change Participation Status')
                             ->action(function (Event $event) {
                                 Event::goingOrNot($event);
                             }),
@@ -105,8 +106,13 @@ class EventResource extends Resource
                         TextEntry::make('prefecture'),
                         TextEntry::make('category'),
                         TextEntry::make('capacity'),
-//                        TextEntry::make('participation_status')
-//                            ->label('Participation Status'),
+                        TextEntry::make('participation_status_label')
+                            ->label('Your Participation Status')
+                            ->badge()
+                            ->color(fn(string $state): string => match ($state) {
+                                'Not going' => 'gray',
+                                'Going' => 'success',
+                            }),
                         TextEntry::make('participants_count')
                             ->label('Total Participants'),
                     ]),
@@ -120,7 +126,6 @@ class EventResource extends Resource
                         TextEntry::make('end_time')
                             ->time('H:m'),
                     ]),
-
             ]);
     }
 

@@ -164,7 +164,10 @@ class Event extends Model implements HasMedia
         // Toggle the participation status
         $newStatus = !$participant || !$participant->pivot->participation_status;
         $event->users()->updateExistingPivot($userId, ['participation_status' => $newStatus]);
-
+        if ($participant->participation_status === 1) {
+            return 'Going';
+        }
+        return 'Not Going';
     }
 
     public function users(): BelongsToMany
@@ -178,7 +181,10 @@ class Event extends Model implements HasMedia
     {
         // Assuming there's a currently authenticated user
         $user = auth()->user();
-
+        if (!$user) {
+            // set participation_status to 0,
+            return 0;
+        }
         // Get the pivot row for the current user
         $pivot = $this->users()->where('user_id', $user->id)->first()?->pivot;
 
@@ -188,7 +194,13 @@ class Event extends Model implements HasMedia
 
     public function getParticipantsCountAttribute()
     {
-        return $this->users()->wherePivot('participation_status', 1)->count();
+        return $this->users()->wherePivot('participation_status', 1)->count() + 1;
+    }
+
+// Add this computed property to your resource or model
+    public function getParticipationStatusLabelAttribute()
+    {
+        return $this->participation_status == 0 ? 'Not going' : 'Going';
     }
 
     public function group(): BelongsTo

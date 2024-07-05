@@ -33,7 +33,6 @@ class EventFactory extends Factory
             'start_time' => $startTime,
             'end_time' => $endTime,
             'capacity' => $this->faker->numberBetween(1, 100),
-            'participants' => null,
             'prefecture' => $this->faker->randomElement(Prefecture::class),
             'meeting_spot' => $this->faker->word(),
             'group_id' => $this->faker->randomNumber(),
