@@ -191,7 +191,7 @@ class Event extends Model implements HasMedia
 
     public function getParticipantAvatarsAttribute()
     {
-        return $this->users()->pluck('avatar_url')->toArray();
+        return $this->users()->wherePivot('participation_status', 1)->pluck('avatar_url')->toArray();
     }
 
     public function getEventCreatorAvatarAttribute()
