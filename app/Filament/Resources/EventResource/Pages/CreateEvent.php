@@ -16,7 +16,7 @@ class CreateEvent extends CreateRecord
         $event = $this->record;
         $user = auth()->user();
 
-        $event->users()->attach($user->id, ['participation_status' => 1]);
+        $event->users()->attach($user->id, ['participation_status' => 1, 'event_creator' => 1]);
 
     }
 }

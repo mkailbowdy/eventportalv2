@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasFactory, Notifiable;
 
@@ -36,6 +37,15 @@ class User extends Authenticatable implements FilamentUser
         'remember_token',
     ];
 
+    protected static function booted()
+    {
+        // set a default avatar using their name
+        static::created(function ($user) {
+            $user->avatar_url = 'https://ui-avatars.com/api/?name='.urlencode($user->name);
+            $user->save();
+        });
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         // TODO: Implement canAccessPanel() method.
@@ -51,6 +61,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->belongsToMany(Event::class)->withPivot('participation_status');
     }
 
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar_url;
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -63,4 +78,5 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
         ];
     }
+
 }

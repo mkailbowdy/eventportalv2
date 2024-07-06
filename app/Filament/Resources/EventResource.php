@@ -128,6 +128,18 @@ class EventResource extends Resource
                             }),
                         TextEntry::make('participants_count')
                             ->label('Total Participants'),
+                        ImageEntry::make('event_creator_avatar')
+                            ->label('Organizer')
+                            ->circular()
+                            ->stacked()
+                            ->limit(3)
+                            ->limitedRemainingText(),
+                        ImageEntry::make('participant_avatars')
+                            ->label('Participants')
+                            ->circular()
+                            ->stacked()
+                            ->limit(3)
+                            ->limitedRemainingText(),
                     ]),
                 Section::make('When')
                     ->columns(3)
@@ -158,5 +170,5 @@ class EventResource extends Resource
             'view' => Pages\ViewEvent::route('/{record}'),
         ];
     }
-    
+
 }

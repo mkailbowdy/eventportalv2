@@ -69,14 +69,6 @@ class Event extends Model implements HasMedia
                         ->helperText(new HtmlString('The <strong>max</strong> number of people that may attend'))
                         ->numeric()
                         ->maxValue(100),
-                    TextInput::make('user_id')
-                        ->columnSpanFull()
-                        ->label('Your User ID')
-                        ->hint(new HtmlString('This will not be shown to the public'))
-                        ->default(Auth::id())
-                        ->disabled()
-                        ->dehydrated(),
-
                 ]),
             Section::make('When')
                 ->columns(3)
@@ -177,11 +169,6 @@ class Event extends Model implements HasMedia
             ->withPivot(['participation_status']);
     }
 
-    public function addEventAuthorAsGoing()
-    {
-
-    }
-
     public function getParticipationStatusAttribute()
     {
         // Assuming there's a currently authenticated user
@@ -201,6 +188,17 @@ class Event extends Model implements HasMedia
     {
         return $this->users()->wherePivot('participation_status', 1)->count();
     }
+
+    public function getParticipantAvatarsAttribute()
+    {
+        return $this->users()->pluck('avatar_url')->toArray();
+    }
+
+    public function getEventCreatorAvatarAttribute()
+    {
+        return $this->users()->wherePivot('event_creator', 1)->first()->avatar_url;
+    }
+
 
 // Add this computed property to your resource or model
     public function getParticipationStatusLabelAttribute()
