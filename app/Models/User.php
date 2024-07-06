@@ -48,12 +48,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // TODO: Implement canAccessPanel() method.
-        $user = Auth::check();
-        if ($user) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     public function events(): BelongsToMany
