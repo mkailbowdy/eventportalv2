@@ -177,6 +177,11 @@ class Event extends Model implements HasMedia
             ->withPivot(['participation_status']);
     }
 
+    public function addEventAuthorAsGoing()
+    {
+
+    }
+
     public function getParticipationStatusAttribute()
     {
         // Assuming there's a currently authenticated user

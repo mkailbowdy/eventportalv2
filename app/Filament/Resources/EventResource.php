@@ -18,6 +18,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class EventResource extends Resource
 {
@@ -89,6 +90,12 @@ class EventResource extends Resource
                             ->label('Change Participation Status')
                             ->action(function (Event $event) {
                                 Event::goingOrNot($event);
+                            })
+                            ->visible(function (Event $record): bool {
+                                if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
+                                    return false;
+                                }
+                                return true;
                             }),
                     ])
                     ->columns(2)
@@ -112,6 +119,12 @@ class EventResource extends Resource
                             ->color(fn(string $state): string => match ($state) {
                                 'Not going' => 'gray',
                                 'Going' => 'success',
+                            })
+                            ->visible(function (Event $record): bool {
+                                if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
+                                    return false;
+                                }
+                                return true;
                             }),
                         TextEntry::make('participants_count')
                             ->label('Total Participants'),
@@ -145,4 +158,5 @@ class EventResource extends Resource
             'view' => Pages\ViewEvent::route('/{record}'),
         ];
     }
+    
 }
