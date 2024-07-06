@@ -23,7 +23,18 @@ use Illuminate\Database\Eloquent\Builder;
 class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
-    
+
+    protected static ?string $navigationLabel = 'All Events';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationGroup = 'Events';
+
+// ADD THIS TO A NEW RESOURCE???
+//    public static function getEloquentQuery(): Builder
+//    {
+//        return parent::getEloquentQuery()
+//            ->join('event_user', 'events.id', '=', 'event_user.event_id')
+//            ->where('participation_status', 1);
+//    }
 
     public static function form(Form $form): Form
     {
@@ -31,24 +42,16 @@ class EventResource extends Resource
             ->schema(Event::getForm());
     }
 
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema(Event::getInfoList());
+    }
+
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
-                Tables\Columns\ImageColumn::make('featured_image')
-                    ->label(false)
-                    ->square()->height(150)->width(100),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->wrap()
-                    ->limit(100),
-                Tables\Columns\TextColumn::make('date')
-                    ->dateTime('M j, Y'),
-//                    ->sortable(),
-                Tables\Columns\TextColumn::make('start_time')
-                    ->dateTime('H:i'),
-//                    ->sortable(),
-            ])
+            ->columns(Event::getTheTable())
             ->defaultSort('date', 'start_time')
             ->filters([
                 Tables\Filters\SelectFilter::make('prefecture')
@@ -74,81 +77,6 @@ class EventResource extends Resource
 //            ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                Section::make('Event Information')
-                    ->columnSpanFull()
-                    ->label(false)
-                    ->footerActions([
-                        Action::make('join')
-                            ->label('Change Participation Status')
-                            ->action(function (Event $event) {
-                                Event::goingOrNot($event);
-                            })
-                            ->visible(function (Event $record): bool {
-                                if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
-                                    return false;
-                                }
-                                return true;
-                            }),
-                    ])
-                    ->columns(2)
-                    ->schema([
-                        TextEntry::make('name'),
-                        ImageEntry::make('featured_image')
-                            ->label(false)
-                            ->width(300)
-                            ->height(300)
-                            ->columnSpanFull(),
-                        TextEntry::make('description')
-                            ->html()
-                            ->columnSpanFull(),
-                        TextEntry::make('meeting_spot'),
-                        TextEntry::make('prefecture'),
-                        TextEntry::make('category'),
-                        TextEntry::make('capacity'),
-                        TextEntry::make('participation_status_label')
-                            ->label('Your Participation Status')
-                            ->badge()
-                            ->color(fn(string $state): string => match ($state) {
-                                'Not going' => 'gray',
-                                'Going' => 'success',
-                            })
-                            ->visible(function (Event $record): bool {
-                                if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
-                                    return false;
-                                }
-                                return true;
-                            }),
-                        TextEntry::make('participants_count')
-                            ->label('Total Participants'),
-                        ImageEntry::make('event_creator_avatar')
-                            ->label('Organizer')
-                            ->circular()
-                            ->stacked()
-                            ->limit(3)
-                            ->limitedRemainingText(),
-                        ImageEntry::make('participant_avatars')
-                            ->label('Participants')
-                            ->circular()
-                            ->stacked()
-                            ->limit(3)
-                            ->limitedRemainingText(),
-                    ]),
-                Section::make('When')
-                    ->columns(3)
-                    ->schema([
-                        TextEntry::make('date')
-                            ->date(),
-                        TextEntry::make('start_time')
-                            ->time('H:m'),
-                        TextEntry::make('end_time')
-                            ->time('H:m'),
-                    ]),
-            ]);
-    }
 
     public static function getPages(): array
     {

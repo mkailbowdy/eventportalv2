@@ -13,6 +13,10 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Filament\Infolists\Components\Section as InfolistSection;
 
 class Event extends Model implements HasMedia
 {
@@ -44,6 +49,9 @@ class Event extends Model implements HasMedia
         'event_gallery' => 'array'
     ];
 
+    // ================================
+    // ======= Form, InfoList, Table =====
+    // ================================
     public static function getForm(): array
     {
         return [
@@ -142,27 +150,101 @@ class Event extends Model implements HasMedia
         ];
     }
 
-    public static function goingOrNot(Event $event)
+    public static function getInfoList(): array
     {
-        if (!Auth::check()) {
-            return redirect('/dashboard');
-        }
-        $userId = Auth::id();
-        // add to event user table
-        $event->users()->syncWithoutDetaching([$userId]);
-
-        $participant = $event->users()->where('users.id', $userId)->first();
-
-        // Toggle the participation status
-        $newStatus = !$participant || !$participant->pivot->participation_status;
-        $event->users()->updateExistingPivot($userId, ['participation_status' => $newStatus]);
-        if ($participant->participation_status === 1) {
-            return 'Going';
-        }
-        return 'Not Going';
+        return [
+            InfoListSection::make('Event Information')
+                ->columnSpanFull()
+                ->label(false)
+                ->footerActions([
+                    \Filament\Infolists\Components\Actions\Action::make('join')
+                        ->label('Change Participation Status')
+                        ->action(function (Event $event) {
+                            Event::goingOrNot($event);
+                        })
+                        ->visible(function (Event $record): bool {
+                            if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
+                                return false;
+                            }
+                            return true;
+                        }),
+                ])
+                ->columns(2)
+                ->schema([
+                    TextEntry::make('name'),
+                    ImageEntry::make('featured_image')
+                        ->label(false)
+                        ->width(300)
+                        ->height(300)
+                        ->columnSpanFull(),
+                    TextEntry::make('description')
+                        ->html()
+                        ->columnSpanFull(),
+                    TextEntry::make('meeting_spot'),
+                    TextEntry::make('prefecture'),
+                    TextEntry::make('category'),
+                    TextEntry::make('capacity'),
+                    TextEntry::make('participation_status_label')
+                        ->label('Your Participation Status')
+                        ->badge()
+                        ->color(fn(string $state): string => match ($state) {
+                            'Not going' => 'danger',
+                            'Going' => 'success',
+                        })
+                        ->visible(function (Event $record): bool {
+                            if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
+                                return false;
+                            }
+                            return true;
+                        }),
+                    TextEntry::make('participants_count')
+                        ->label('Total Participants'),
+                    ImageEntry::make('event_creator_avatar')
+                        ->label('Organizer')
+                        ->circular()
+                        ->stacked()
+                        ->limit(3)
+                        ->limitedRemainingText(),
+                    ImageEntry::make('participant_avatars')
+                        ->label('Participants')
+                        ->circular()
+                        ->stacked()
+                        ->limit(3)
+                        ->limitedRemainingText(),
+                ]),
+            InfoListSection::make('When')
+                ->columns(3)
+                ->schema([
+                    TextEntry::make('date')
+                        ->date(),
+                    TextEntry::make('start_time')
+                        ->time('H:m'),
+                    TextEntry::make('end_time')
+                        ->time('H:m'),
+                ]),
+        ];
     }
 
+    public static function getTheTable(): array
+    {
+        return [
+            ImageColumn::make('featured_image')
+                ->label(false)
+                ->square()->height(150)->width(100),
+            TextColumn::make('name')
+                ->searchable()
+                ->wrap()
+                ->limit(100),
+            TextColumn::make('date')
+                ->dateTime('M j, Y'),
+            TextColumn::make('start_time')
+                ->dateTime('H:i'),
+        ];
+    }
 
+    // ================================
+    // ======= Getters/Accessors =====
+    // ================================
     public function getParticipationStatusAttribute()
     {
         // Assuming there's a currently authenticated user
@@ -199,6 +281,32 @@ class Event extends Model implements HasMedia
         return $this->participation_status == 0 ? 'Not going' : 'Going';
     }
 
+    // ================================
+    // ======= Static Methods =====
+    // ================================
+    public static function goingOrNot(Event $event)
+    {
+        if (!Auth::check()) {
+            return redirect('/dashboard');
+        }
+        $userId = Auth::id();
+        // add to event user table
+        $event->users()->syncWithoutDetaching([$userId]);
+
+        $participant = $event->users()->where('users.id', $userId)->first();
+
+        // Toggle the participation status
+        $newStatus = !$participant || !$participant->pivot->participation_status;
+        $event->users()->updateExistingPivot($userId, ['participation_status' => $newStatus]);
+        if ($participant->participation_status === 1) {
+            return 'Going';
+        }
+        return 'Not Going';
+    }
+
+    // ================================
+    // ======= Relationships =====
+    // ================================
     public function users(): BelongsToMany
     {
         // if we dont add withPivot, we can only get the user_id and event_id, but not participation
