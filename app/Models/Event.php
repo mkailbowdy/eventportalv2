@@ -199,7 +199,7 @@ class Event extends Model implements HasMedia
 
     public function getParticipantsCountAttribute()
     {
-        return $this->users()->wherePivot('participation_status', 1)->count() + 1;
+        return $this->users()->wherePivot('participation_status', 1)->count();
     }
 
 // Add this computed property to your resource or model
