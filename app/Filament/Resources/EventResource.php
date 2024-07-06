@@ -24,6 +24,7 @@ class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
     
+
     public static function form(Form $form): Form
     {
         return $form

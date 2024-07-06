@@ -26,16 +26,16 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
 
-        Filament::serving(function () {
-            Filament::registerNavigationItems([
-                NavigationItem::make('Dashboard')
-                    ->url('/dashboard')
-                    ->icon('heroicon-o-home'),
-                NavigationItem::make('Events')
-                    ->url('/events')
-                    ->icon('heroicon-o-home'),
-
-            ]);
-        });
+//        Filament::serving(function () {
+//            Filament::registerNavigationItems([
+//                NavigationItem::make('Dashboard')
+//                    ->url('/dashboard')
+//                    ->icon('heroicon-o-home'),
+//                NavigationItem::make('Events')
+//                    ->url('/events')
+//                    ->icon('heroicon-o-home'),
+//
+//            ]);
+//        });
     }
 }
