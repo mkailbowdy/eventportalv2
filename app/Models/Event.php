@@ -199,8 +199,7 @@ class Event extends Model implements HasMedia
         return $this->users()->wherePivot('event_creator', 1)->first()->avatar_url;
     }
 
-
-// Add this computed property to your resource or model
+    // Add this computed property to your resource or model
     public function getParticipationStatusLabelAttribute()
     {
         return $this->participation_status == 0 ? 'Not going' : 'Going';
@@ -210,5 +209,4 @@ class Event extends Model implements HasMedia
     {
         return $this->belongsTo(Group::class);
     }
-
 }
