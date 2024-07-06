@@ -23,6 +23,7 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+
         return $panel
             ->id('admin')
             ->path('dashboard')
@@ -57,11 +58,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->navigationItems([
-                NavigationItem::make('Events')
-                    ->url('/events')
-                    ->icon('heroicon-o-rectangle-stack'),
             ]);
     }
 }

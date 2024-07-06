@@ -23,12 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
-
-    // Don't need to declare it, but just as example...
-    protected static ?string $navigationLabel = 'Events';
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-
+    
     public static function form(Form $form): Form
     {
         return $form
@@ -152,13 +147,6 @@ class EventResource extends Resource
                             ->time('H:m'),
                     ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

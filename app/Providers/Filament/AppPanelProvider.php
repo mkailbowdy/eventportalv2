@@ -27,11 +27,11 @@ class AppPanelProvider extends PanelProvider
             ->default()
             ->id('app')
             ->path('/')
-//            ->login()
-//            ->registration()
-//            ->passwordReset()
-//            ->emailVerification()
-//            ->profile()
+            ->login()
+            ->registration()
+            ->passwordReset()
+            ->emailVerification()
+            ->profile()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -58,11 +58,6 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
 //                Authenticate::class,
-            ])
-            ->navigationItems([
-                NavigationItem::make('Dashboard')
-                    ->url('/dashboard')
-                    ->icon('heroicon-o-home'),
             ]);
     }
 }

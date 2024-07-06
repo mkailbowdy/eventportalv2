@@ -162,12 +162,6 @@ class Event extends Model implements HasMedia
         return 'Not Going';
     }
 
-    public function users(): BelongsToMany
-    {
-        // if we dont add withPivot, we can only get the user_id and event_id, but not participation
-        return $this->belongsToMany(User::class)
-            ->withPivot(['participation_status']);
-    }
 
     public function getParticipationStatusAttribute()
     {
@@ -203,6 +197,13 @@ class Event extends Model implements HasMedia
     public function getParticipationStatusLabelAttribute()
     {
         return $this->participation_status == 0 ? 'Not going' : 'Going';
+    }
+
+    public function users(): BelongsToMany
+    {
+        // if we dont add withPivot, we can only get the user_id and event_id, but not participation
+        return $this->belongsToMany(User::class)
+            ->withPivot(['participation_status']);
     }
 
     public function group(): BelongsTo
