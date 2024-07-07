@@ -2,9 +2,11 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\EditProfile;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
@@ -58,6 +60,21 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->authGuard('web')
+            ->topNavigation()
+            ->userMenuItems([
+                'profile' => MenuItem::make()->label('Edit profile'),
+                // ...
+            ])
+            ->profile(EditProfile::class);
+//            ->userMenuItems([
+//                MenuItem::make()
+//                    ->label('Settings')
+//                    ->url('profile')
+//                    ->icon('heroicon-o-cog-6-tooth'),
+//                // ...
+//            ]);
+//            ->sidebarCollapsibleOnDesktop();
     }
 }
