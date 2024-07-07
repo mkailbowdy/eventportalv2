@@ -163,9 +163,12 @@ class Event extends Model implements HasMedia
                             Event::goingOrNot($event);
                         })
                         ->visible(function (Event $record): bool {
-                            if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
+                            $user_id = $record->users()->wherePivot('event_creator', 1)->get()->first()->id;
+
+                            if (auth()->id() === $user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
                                 return false;
                             }
+//                            dd($record->users()->wherePivot('event_creator', 1));
                             return true;
                         }),
                 ])
@@ -311,7 +314,7 @@ class Event extends Model implements HasMedia
     {
         // if we dont add withPivot, we can only get the user_id and event_id, but not participation
         return $this->belongsToMany(User::class)
-            ->withPivot(['participation_status']);
+            ->withPivot(['participation_status', 'event_creator']);
     }
 
     public function group(): BelongsTo

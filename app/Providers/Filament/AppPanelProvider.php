@@ -61,7 +61,7 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->authGuard('web')
+//            ->authGuard('web')
             ->topNavigation()
             ->userMenuItems([
                 'profile' => MenuItem::make()->label('Edit profile'),

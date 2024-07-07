@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class EventPolicy
 {
+
+
     /**
      * Determine whether the user can view any models.
      */
@@ -38,7 +40,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event): bool
     {
-        return $user->id === $event->user_id;
+        return $user->id === $event->users()->wherePivot('event_creator', 1)->get()->first()->id;
     }
 
     /**
@@ -46,7 +48,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event): bool
     {
-        return $user->id === $event->user_id;
+        return $user->id === $event->users()->wherePivot('event_creator', 1)->get()->first()->id;
     }
 //
 //    /**

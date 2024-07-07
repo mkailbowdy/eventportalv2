@@ -17,6 +17,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -53,7 +54,15 @@ class EventResource extends Resource
         return $table
             ->columns(Event::getTheTable())
             ->defaultSort('date', 'start_time')
+//            https://filamentphp.com/docs/3.x/tables/filters/getting-started
             ->filters([
+//                Filter::make('event_creator')
+//                    ->query(function (Builder $query): Builder {
+//                        return $query->whereHas('users', function (Builder $query) {
+//                            $query->where('event_user.event_creator', 1);
+//                        });
+//                    })
+//                    ->label('Created by me'),
                 Tables\Filters\SelectFilter::make('prefecture')
                     ->options(Prefecture::class)
                     ->multiple(),
