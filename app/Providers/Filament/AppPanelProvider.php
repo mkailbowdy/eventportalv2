@@ -67,6 +67,7 @@ class AppPanelProvider extends PanelProvider
                 'profile' => MenuItem::make()->label('Edit profile'),
                 // ...
             ])
+            // https://filamentphp.com/docs/3.x/panels/users
             ->profile(EditProfile::class);
 //            ->userMenuItems([
 //                MenuItem::make()
