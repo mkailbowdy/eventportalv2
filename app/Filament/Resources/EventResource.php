@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -79,7 +80,7 @@ class EventResource extends Resource
                     ->default(false)
                     ->label('Show only events I\'m hosting')
                     ->columnSpanFull()->toggle(),
-            ])
+            ], layout: FiltersLayout::Modal)
             ->hiddenFilterIndicators()
             ->persistFiltersInSession()
             ->filtersFormColumns(2)
