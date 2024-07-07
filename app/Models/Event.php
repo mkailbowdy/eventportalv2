@@ -15,6 +15,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -242,6 +243,15 @@ class Event extends Model implements HasMedia
                 ->dateTime('M j, Y'),
             TextColumn::make('start_time')
                 ->dateTime('H:i'),
+            IconColumn::make('participation_status')
+                ->boolean()
+                ->trueIcon('heroicon-o-check-circle')
+                ->falseIcon(false)
+                ->label('Participating')
+                ->getStateUsing(function (Event $record) {
+                    return $record->users()->where('user_id',
+                        auth()->id())->first()?->pivot->participation_status ?? false;
+                }),
         ];
     }
 

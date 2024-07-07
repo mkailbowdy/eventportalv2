@@ -21,9 +21,9 @@ class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
 
-    protected static ?string $navigationLabel = 'All Events';
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Events';
+//    protected static ?string $navigationLabel = 'All Events';
+//    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+//    protected static ?string $navigationGroup = 'Events';
 
 // ADD THIS TO A NEW RESOURCE???
 //    public static function getEloquentQuery(): Builder
@@ -78,8 +78,19 @@ class EventResource extends Resource
                         });
                     })
                     ->default(false)
-                    ->label('Show only events I\'m hosting')
+                    ->label('Events I\'m hosting')
                     ->columnSpanFull()->toggle(),
+                Filter::make('participation_status')
+                    ->query(function (Builder $query): Builder {
+                        return $query->whereHas('users', function (Builder $query) {
+                            $query->where('event_user.participation_status', 1)
+                                ->where('users.id', auth()->id());
+                        });
+                    })
+                    ->default(false)
+                    ->label('Events I\'m going to')
+                    ->columnSpanFull()->toggle(),
+
             ], layout: FiltersLayout::Modal)
             ->hiddenFilterIndicators()
             ->persistFiltersInSession()
@@ -89,7 +100,7 @@ class EventResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\deleteAction::make(),
             ])
-            ->searchable(false);
+            ->searchable(true);
     }
 
 
