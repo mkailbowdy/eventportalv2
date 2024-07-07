@@ -7,22 +7,12 @@ use App\Enums\Prefecture;
 use App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\EventResource\RelationManagers;
 use App\Models\Event;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\Actions;
-use Filament\Infolists\Components\Actions\Action;
-use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\QueryBuilder;
-use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
-use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint\Operators\IsAfterOperator;
-use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint\Operators\IsDateOperator;
-use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint\Operators\IsMonthOperator;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -59,23 +49,26 @@ class EventResource extends Resource
         return $table
             ->columns(Event::getTheTable())
             ->defaultSort('date', 'start_time')
-//            https://filamentphp.com/docs/3.x/tables/filters/getting-started
             ->filters([
+                Filter::make('date')
+                    ->form([
+                        DatePicker::make('date')->default(now())
+                            ->label('Events on and after'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['date'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('date', '>=', $date),
+                            );
+                    })
+                    ->columnSpanFull(),
                 Tables\Filters\SelectFilter::make('prefecture')
                     ->options(Prefecture::class)
                     ->multiple(),
                 Tables\Filters\SelectFilter::make('category')
                     ->options(Category::class)
                     ->multiple(),
-                QueryBuilder::make()
-                    ->constraints([
-                        DateConstraint::make('date')
-                            ->operators([
-                                IsAfterOperator::class,
-                                IsDateOperator::class,
-                                IsMonthOperator::class,
-                            ])
-                    ]),
                 Filter::make('event_creator')
                     ->query(function (Builder $query): Builder {
                         return $query->whereHas('users', function (Builder $query) {
@@ -83,9 +76,9 @@ class EventResource extends Resource
                                 ->where('users.id', auth()->id());
                         });
                     })
+                    ->default(false)
                     ->label('Show only events I\'m hosting')
                     ->columnSpanFull()->toggle(),
-
             ])
             ->hiddenFilterIndicators()
             ->persistFiltersInSession()
@@ -96,11 +89,6 @@ class EventResource extends Resource
                 Tables\Actions\deleteAction::make(),
             ])
             ->searchable(false);
-//            ->bulkActions([
-//                Tables\Actions\BulkActionGroup::make([
-//                    Tables\Actions\DeleteBulkAction::make(),
-//                ]),
-//            ]);
     }
 
 
