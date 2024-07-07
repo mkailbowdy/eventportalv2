@@ -18,6 +18,11 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\QueryBuilder;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint\Operators\IsAfterOperator;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint\Operators\IsDateOperator;
+use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint\Operators\IsMonthOperator;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -56,20 +61,32 @@ class EventResource extends Resource
             ->defaultSort('date', 'start_time')
 //            https://filamentphp.com/docs/3.x/tables/filters/getting-started
             ->filters([
-//                Filter::make('event_creator')
-//                    ->query(function (Builder $query): Builder {
-//                        return $query->whereHas('users', function (Builder $query) {
-//                            $query->where('event_user.event_creator', 1);
-//                        });
-//                    })
-//                    ->label('Created by me'),
                 Tables\Filters\SelectFilter::make('prefecture')
                     ->options(Prefecture::class)
                     ->multiple(),
                 Tables\Filters\SelectFilter::make('category')
                     ->options(Category::class)
-                    ->multiple()
-            ], layout: FiltersLayout::AboveContent)
+                    ->multiple(),
+                QueryBuilder::make()
+                    ->constraints([
+                        DateConstraint::make('date')
+                            ->operators([
+                                IsAfterOperator::class,
+                                IsDateOperator::class,
+                                IsMonthOperator::class,
+                            ])
+                    ]),
+                Filter::make('event_creator')
+                    ->query(function (Builder $query): Builder {
+                        return $query->whereHas('users', function (Builder $query) {
+                            $query->where('event_user.event_creator', 1)
+                                ->where('users.id', auth()->id());
+                        });
+                    })
+                    ->label('Show only events I\'m hosting')
+                    ->columnSpanFull()->toggle(),
+
+            ])
             ->hiddenFilterIndicators()
             ->persistFiltersInSession()
             ->filtersFormColumns(2)
