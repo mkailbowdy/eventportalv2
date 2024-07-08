@@ -178,8 +178,8 @@ class Event extends Model implements HasMedia
                     TextEntry::make('name'),
                     ImageEntry::make('featured_image')
                         ->label(false)
-                        ->width(300)
-                        ->height(300)
+                        ->width(600)
+                        ->height(600)
                         ->columnSpanFull(),
                     TextEntry::make('description')
                         ->html()
@@ -210,6 +210,7 @@ class Event extends Model implements HasMedia
                         ->limit(3)
                         ->limitedRemainingText(),
                     ImageEntry::make('participant_avatars')
+                        ->url('/')
                         ->label('Participants')
                         ->circular()
                         ->stacked()
