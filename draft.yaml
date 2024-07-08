@@ -1,9 +1,6 @@
 models:
 
-  Group:
-    name: string
-    description: text
-    prefecture: string
-    images: text nullable
+  Comment:
+    body: text
     relationships:
-      hasMany: Event
+      belongsTo: Event, User

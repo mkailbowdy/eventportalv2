@@ -8,6 +8,7 @@ use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +55,11 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     public function events(): BelongsToMany
     {
         return $this->belongsToMany(Event::class)->withPivot('participation_status');
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function getFilamentAvatarUrl(): ?string
