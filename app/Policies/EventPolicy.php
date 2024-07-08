@@ -40,7 +40,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event): bool
     {
-        return $user->id === $event->users()->wherePivot('event_creator', 1)->get()->first()->id;
+        return $user->id === $event->owner_id;
     }
 
     /**
@@ -48,7 +48,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event): bool
     {
-        return $user->id === $event->users()->wherePivot('event_creator', 1)->get()->first()->id;
+        return $user->id === $event->owner_id;
     }
 //
 //    /**

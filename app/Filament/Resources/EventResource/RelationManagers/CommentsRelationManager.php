@@ -15,11 +15,15 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CommentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'comments';
+    protected static ?string $title = "Comments";
+
 
     public function isReadOnly(): bool
     {
         return false;
     }
+
+//    protected static ?string $badge = 'new';
 
     public function form(Form $form): Form
     {
@@ -39,10 +43,11 @@ class CommentsRelationManager extends RelationManager
                 Tables\Columns\ImageColumn::make('user.avatar_url')
                     ->circular()
                     ->label(false),
-                Tables\Columns\TextColumn::make('body'),
+                Tables\Columns\TextColumn::make('body')
+                    ->label(false),
                 TextColumn::make('user.name'),
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->sortable()
                     ->formatStateUsing(function (Carbon $state) {
                         $diff = $state->diffForHumans([
                             'parts' => 1,
@@ -50,7 +55,6 @@ class CommentsRelationManager extends RelationManager
                         ]);
                         return $diff;
                     })
-                    ->sortable()
                     ->tooltip(fn(Carbon $state) => $state->format('F j, Y, g:i A')),
             ])
             ->filters([

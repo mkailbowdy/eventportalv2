@@ -21,7 +21,8 @@ return new class extends Migration {
             $table->unsignedInteger('capacity');
             $table->string('prefecture');
             $table->string('meeting_spot');
-//            $table->unsignedInteger('group_id')->nullable();
+//            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('owner_id');
             $table->text('featured_image')->nullable();
             $table->text('event_gallery')->nullable();
             $table->timestamps();

@@ -15,7 +15,10 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class UsersRelationManager extends RelationManager
 {
     protected static string $relationship = 'users';
+
     protected $listeners = ['refreshUsersRelationManager' => '$refresh'];
+    protected static ?string $title = "Who's Going";
+
 
 //    public function form(Form $form): Form
 //    {

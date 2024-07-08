@@ -52,6 +52,17 @@ class Event extends Model implements HasMedia
         'event_gallery' => 'array'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($event) {
+            if (!$event->owner_id) {
+                $event->owner_id = Auth::id();
+            }
+        });
+    }
+
     // ================================
     // ======= Form, InfoList, Table =====
     // ================================
@@ -161,19 +172,36 @@ class Event extends Model implements HasMedia
                 ->label(false)
                 ->footerActions([
                     \Filament\Infolists\Components\Actions\Action::make('join')
-                        ->label('Change Participation Status')
+                        ->label(function (Event $event) {
+
+                            $currentUser = auth()->user();
+                            $isUserParticipating = $event->users()->where('user_id', $currentUser->id)->exists();
+                            $isEventFull = $event->users()->count() >= $event->capacity;
+                            $isEventFull = $event->users()->count() >= $event->capacity;
+
+                            if ($isEventFull && !$isUserParticipating) {
+                                return 'Event is full!';
+                            }
+
+                            return 'Change Participation Status';
+                        })
                         ->action(function (Event $event, $livewire) {
                             Event::goingOrNot($event);
                             $livewire->dispatch('refreshUsersRelationManager');
                         })
-                        ->visible(function (Event $record): bool {
-                            $user_id = $record->users()->wherePivot('event_creator', 1)->get()->first()->id;
+                        ->visible(function (Event $event): bool {
 
-                            if (auth()->id() === $user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
+                            if (auth()->id() === $event->owner_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
                                 return false;
                             }
-//                            dd($record->users()->wherePivot('event_creator', 1));
                             return true;
+                        })
+                        ->disabled(function (Event $event): bool {
+                            $currentUser = auth()->user();
+                            $isUserParticipating = $event->users()->where('user_id', $currentUser->id)->exists();
+                            $isEventFull = $event->users()->count() >= $event->capacity;
+
+                            return $isEventFull && !$isUserParticipating;
                         }),
                 ])
                 ->columns(2)
@@ -205,8 +233,10 @@ class Event extends Model implements HasMedia
                             'Not going' => 'danger',
                             'Going' => 'success',
                         })
-                        ->visible(function (Event $record): bool {
-                            if (auth()->id() === $record->user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
+                        ->visible(function (Event $event): bool {
+                            $user_id = $event->owner_id;
+
+                            if (auth()->id() === $user_id) {  // Assuming 'user_id' is the foreign key to the user who created the event
                                 return false;
                             }
                             return true;
@@ -288,13 +318,17 @@ class Event extends Model implements HasMedia
 
     public function getEventCreatorAvatarAttribute()
     {
-        return $this->users()->wherePivot('event_creator', 1)->first()->avatar_url;
+        return $this->owner->avatar_url;
     }
 
     // Add this computed property to your resource or model
     public function getParticipationStatusLabelAttribute()
     {
-        return $this->participation_status == 0 ? 'Not going' : 'Going';
+        $currentUser = auth()->user();
+        $participation = $this->users()->where('users.id',
+            $currentUser->id)->first()->pivot->participation_status ?? null;
+
+        return $participation == 1 ? 'Going' : 'Not going';
     }
 
     // ================================
@@ -328,6 +362,11 @@ class Event extends Model implements HasMedia
         // if we dont add withPivot, we can only get the user_id and event_id, but not participation
         return $this->belongsToMany(User::class)
             ->withPivot(['participation_status', 'event_creator']);
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
     }
 
     public function group(): BelongsTo

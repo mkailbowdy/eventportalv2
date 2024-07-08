@@ -61,14 +61,14 @@ class AppPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-//            ->authGuard('web')
+            ->authGuard('web')
             ->topNavigation()
             ->userMenuItems([
                 'profile' => MenuItem::make()->label('Edit profile'),
-                // ...
             ])
             // https://filamentphp.com/docs/3.x/panels/users
             ->profile(EditProfile::class);
+
 //            ->userMenuItems([
 //                MenuItem::make()
 //                    ->label('Settings')
