@@ -175,9 +175,10 @@ class Event extends Model implements HasMedia
                         ->label(function (Event $event) {
 
                             $currentUser = auth()->user();
-                            $isUserParticipating = $event->users()->where('user_id', $currentUser->id)->exists();
-                            $isEventFull = $event->users()->count() >= $event->capacity;
-                            $isEventFull = $event->users()->count() >= $event->capacity;
+                            $userParticipation = $event->users()->where('user_id', $currentUser->id)->first();
+                            $isUserParticipating = $userParticipation ? $userParticipation->pivot->participation_status : null;
+                            $isEventFull = $event->users()->wherePivot('participation_status',
+                                    1)->get()->count() >= $event->capacity;
 
                             if ($isEventFull && !$isUserParticipating) {
                                 return 'Event is full!';
@@ -198,8 +199,10 @@ class Event extends Model implements HasMedia
                         })
                         ->disabled(function (Event $event): bool {
                             $currentUser = auth()->user();
-                            $isUserParticipating = $event->users()->where('user_id', $currentUser->id)->exists();
-                            $isEventFull = $event->users()->count() >= $event->capacity;
+                            $userParticipation = $event->users()->where('user_id', $currentUser->id)->first();
+                            $isUserParticipating = $userParticipation ? $userParticipation->pivot->participation_status : null;
+                            $isEventFull = $event->users()->wherePivot('participation_status',
+                                    1)->get()->count() >= $event->capacity;
 
                             return $isEventFull && !$isUserParticipating;
                         }),
