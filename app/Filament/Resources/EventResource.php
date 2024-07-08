@@ -103,6 +103,12 @@ class EventResource extends Resource
             ->searchable(true);
     }
 
+    public static function getRelations(): array
+    {
+        return [
+            RelationManagers\UsersRelationManager::class,
+        ];
+    }
 
     public static function getPages(): array
     {

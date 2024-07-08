@@ -8,6 +8,7 @@ use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Livewire;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -160,8 +161,9 @@ class Event extends Model implements HasMedia
                 ->footerActions([
                     \Filament\Infolists\Components\Actions\Action::make('join')
                         ->label('Change Participation Status')
-                        ->action(function (Event $event) {
+                        ->action(function (Event $event, $livewire) {
                             Event::goingOrNot($event);
+                            $livewire->dispatch('refreshUsersRelationManager');
                         })
                         ->visible(function (Event $record): bool {
                             $user_id = $record->users()->wherePivot('event_creator', 1)->get()->first()->id;
@@ -188,7 +190,14 @@ class Event extends Model implements HasMedia
                     TextEntry::make('prefecture'),
                     TextEntry::make('category'),
                     TextEntry::make('capacity'),
+                    ImageEntry::make('event_creator_avatar')
+                        ->label('Organizer')
+                        ->circular()
+                        ->stacked()
+                        ->limit(3)
+                        ->limitedRemainingText(),
                     TextEntry::make('participation_status_label')
+                        ->columnSpanFull()
                         ->label('Your Participation Status')
                         ->badge()
                         ->color(fn(string $state): string => match ($state) {
@@ -201,21 +210,13 @@ class Event extends Model implements HasMedia
                             }
                             return true;
                         }),
-                    TextEntry::make('participants_count')
-                        ->label('Total Participants'),
-                    ImageEntry::make('event_creator_avatar')
-                        ->label('Organizer')
-                        ->circular()
-                        ->stacked()
-                        ->limit(3)
-                        ->limitedRemainingText(),
-                    ImageEntry::make('participant_avatars')
-                        ->url('/')
-                        ->label('Participants')
-                        ->circular()
-                        ->stacked()
-                        ->limit(3)
-                        ->limitedRemainingText(),
+//                    ImageEntry::make('participant_avatars')
+//                        ->url('/')
+//                        ->label('Participants')
+//                        ->circular()
+//                        ->stacked()
+//                        ->limit(3)
+//                        ->limitedRemainingText(),
                 ]),
             InfoListSection::make('When')
                 ->columns(3)
