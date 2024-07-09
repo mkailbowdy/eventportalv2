@@ -127,8 +127,8 @@ class Event extends Model implements HasMedia
                         )
                         ->hint('Don\'t know the address?')
                         ->hintIcon('heroicon-m-question-mark-circle',
-                            tooltip: 'Click the icon, find the location, then copy the address!')
-                        ->helperText(new HtmlString('e.g. Osaka Castle, 1-1 Osakajo, Chuo Ward, Osaka, 540-0002')),
+                            tooltip: 'Click the icon, find the location, then copy the address!'),
+//                        ->helperText(new HtmlString('e.g. Osaka Castle, 1-1 Osakajo, Chuo Ward, Osaka, 540-0002')),
                     Select::make('prefecture')
                         ->required()
                         ->live()
