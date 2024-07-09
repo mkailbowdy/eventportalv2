@@ -14,8 +14,10 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\View;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -116,7 +118,16 @@ class Event extends Model implements HasMedia
                     TextInput::make('meeting_spot')
                         ->required()
                         ->columnSpanFull()
-                        ->hint(new HtmlString('<a href="/maps">Get the address using our <strong>Google Maps</strong> feature!</a>'))
+                        ->suffixAction(
+                            Action::make('openMapsModal')
+                                ->label('Get address')
+                                ->icon('heroicon-m-map')
+                                ->url('/maps')
+                                ->openUrlInNewTab()
+                        )
+                        ->hint('Don\'t know the address?')
+                        ->hintIcon('heroicon-m-question-mark-circle',
+                            tooltip: 'Click the icon, find the location, then copy the address!')
                         ->helperText(new HtmlString('e.g. Osaka Castle, 1-1 Osakajo, Chuo Ward, Osaka, 540-0002')),
                     Select::make('prefecture')
                         ->required()
