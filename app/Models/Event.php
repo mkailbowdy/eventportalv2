@@ -9,6 +9,7 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Livewire;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -80,6 +81,15 @@ class Event extends Model implements HasMedia
                         ->maxLength(255),
                     RichEditor::make('description')
                         ->required()
+                        ->toolbarButtons([
+                            'bold',
+                            'italic',
+                            'link',
+                            'redo',
+                            'strike',
+                            'underline',
+                            'undo',
+                        ])
                         ->columnSpanFull(),
                     Select::make('category')
                         ->required()

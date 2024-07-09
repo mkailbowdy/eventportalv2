@@ -7,6 +7,7 @@ use App\Enums\Prefecture;
 use App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\EventResource\RelationManagers;
 use App\Models\Event;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
@@ -108,7 +109,7 @@ class EventResource extends Resource
         return [
             RelationManagers\CommentsRelationManager::class,
             RelationManagers\UsersRelationManager::class,
-            
+
         ];
     }
 
