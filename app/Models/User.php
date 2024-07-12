@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
@@ -12,6 +14,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
+use Filament\Infolists\Components\Section as InfolistSection;
+
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
 {
@@ -77,6 +81,36 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+        ];
+    }
+
+    public static function getInfoList(): array
+    {
+        return [
+            InfoListSection::make('Bio')
+                ->columnSpanFull()
+                ->label(false)
+                ->columns(1)
+                ->schema([
+                    ImageEntry::make('avatar_url')
+                        ->label(false)
+                        ->circular()
+                        ->columnSpanFull(),
+                    TextEntry::make('name'),
+                    TextEntry::make('bio')
+                        ->label('Hobbies and interests'),
+                    TextEntry::make('location'),
+                ]),
+//            InfoListSection::make('When')
+//                ->columns(3)
+//                ->schema([
+//                    TextEntry::make('date')
+//                        ->date(),
+//                    TextEntry::make('start_time')
+//                        ->time('H:m'),
+//                    TextEntry::make('end_time')
+//                        ->time('H:m'),
+//                ]),
         ];
     }
 
