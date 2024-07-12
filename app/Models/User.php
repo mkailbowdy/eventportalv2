@@ -49,7 +49,10 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        if (auth()->user()->is_admin) {
+            return true;
+        }
+        return false;
     }
 
     public function events(): BelongsToMany
