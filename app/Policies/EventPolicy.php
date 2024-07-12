@@ -40,6 +40,9 @@ class EventPolicy
      */
     public function update(User $user, Event $event): bool
     {
+        if ($user->is_admin) {
+            return true;
+        }
         return $user->id === $event->owner_id;
     }
 
@@ -48,6 +51,9 @@ class EventPolicy
      */
     public function delete(User $user, Event $event): bool
     {
+        if ($user->is_admin) {
+            return true;
+        }
         return $user->id === $event->owner_id;
     }
 //

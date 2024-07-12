@@ -28,7 +28,10 @@ class UserPolicy
      */
     public function create(User $user): bool
     {
-        return $user->id === 1;
+        if ($user->is_admin) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -36,6 +39,9 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
+        if ($user->is_admin) {
+            return true;
+        }
         return $user->id === $model->id;
     }
 
@@ -44,7 +50,10 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return $user->id === 1;
+        if ($user->is_admin) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -53,6 +62,9 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return $user->id === 1;
+        if ($user->is_admin) {
+            return true;
+        }
+        return false;
     }
 }
