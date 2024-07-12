@@ -10,6 +10,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UsersRelationManager extends RelationManager
@@ -44,6 +45,12 @@ class UsersRelationManager extends RelationManager
                     ->label('Participants')
                     ->circular()
             ])
+            ->recordUrl(
+                function (Model $record): string {
+                    return '/users/'.$record->user_id;
+//                    return route('users.view', ['record' => $record]);
+                },
+            )
             ->filters([
                 //
             ]);
