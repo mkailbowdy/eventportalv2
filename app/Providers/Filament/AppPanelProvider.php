@@ -33,7 +33,7 @@ class AppPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('app')
-            ->path('/')
+            ->path('/app')
             ->spa()
             ->unsavedChangesAlerts()
             ->brandName('ibento')
