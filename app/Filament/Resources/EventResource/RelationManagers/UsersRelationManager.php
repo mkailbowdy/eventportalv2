@@ -47,7 +47,7 @@ class UsersRelationManager extends RelationManager
             ])
             ->recordUrl(
                 function (Model $record): string {
-                    return '/users/'.$record->user_id;
+                    return '../users/'.$record->user_id;
 //                    return route('users.view', ['record' => $record]);
                 },
             )

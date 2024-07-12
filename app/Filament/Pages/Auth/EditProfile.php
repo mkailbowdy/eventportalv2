@@ -72,7 +72,7 @@ class EditProfile extends BaseEditProfile
             $this->redirect($redirectUrl, navigate: FilamentView::hasSpaMode() && is_app_url($redirectUrl));
         }
 
-        redirect('/login');
+        redirect('/app');
     }
 
     public function form(Form $form): Form

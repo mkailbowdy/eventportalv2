@@ -10,6 +10,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use App\Filament\Resources\EventResource\Pages;
+use Illuminate\Database\Eloquent\Model;
 
 
 class EventsGoing extends BaseWidget
@@ -40,6 +41,12 @@ class EventsGoing extends BaseWidget
                 TextColumn::make('start_time')
                     ->dateTime('H:i'),
             ])
+            ->recordUrl(
+                function (Model $record): string {
+                    return '../events/'.$record->id;
+//                    return route('users.view', ['record' => $record]);
+                },
+            )
             ->actions([
                 Action::make('view')
                     ->url(fn(Event $record): string => route('filament.app.resources.events.view',
