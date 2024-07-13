@@ -153,7 +153,6 @@ class Event extends Model implements HasMedia
 //                        ->directory('event_images')
                         ->helperText('The image that will be shown on the Event listings page')
                         ->imageEditor()
-                        ->maxSize(10000)
                         ->hint('10MB maximum'),
 //                    FileUpload::make('event_gallery')
 //                        ->directory('event_images')
