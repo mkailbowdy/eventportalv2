@@ -19,13 +19,13 @@ use function Filament\Support\is_app_url;
 class EditProfile extends BaseEditProfile
 {
     // If user deletes their avatar picture, then set their avatar to a default avatar
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        if (!$data['avatar_url']) {
-            $data['avatar_url'] = 'https://ui-avatars.com/api/?name='.urlencode($data['name']);
-        }
-        return $data;
-    }
+//    protected function mutateFormDataBeforeSave(array $data): array
+//    {
+//        if (!$data['avatar_url']) {
+//            $data['avatar_url'] = 'https://ui-avatars.com/api/?name='.urlencode($data['name']);
+//        }
+//        return $data;
+//    }
 
     public function save(): void
     {

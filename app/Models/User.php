@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Section as InfolistSection;
 
 
-class User extends Authenticatable implements FilamentUser, HasAvatar
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -48,8 +48,8 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
     {
         // set a default avatar using their name
         static::created(function ($user) {
-            $user->avatar_url = 'https://ui-avatars.com/api/?name='.urlencode($user->name);
-            $user->save();
+//            $user->avatar_url = 'https://ui-avatars.com/api/?name='.urlencode($user->name);
+//            $user->save();
             event(new Registered($user));
         });
     }
