@@ -90,8 +90,8 @@ class AppPanelProvider extends PanelProvider
                     ->sort(3),
             ])
             // https://filamentphp.com/docs/3.x/panels/users
-            ->profile(EditProfile::class)
-            ->emailVerification();
+            ->profile(EditProfile::class);
+//            ->emailVerification();
 
 //            ->userMenuItems([
 //                MenuItem::make()
