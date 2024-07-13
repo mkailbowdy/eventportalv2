@@ -17,7 +17,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Section as InfolistSection;
-use Illuminate\Support\Facades\Storage;
 
 
 class User extends Authenticatable implements FilamentUser, HasAvatar
@@ -72,9 +71,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->avatar_path
-            ? Storage::url($this->avatar_path)
-            : null;
+        return $this->avatar_url;
     }
 
     /**
