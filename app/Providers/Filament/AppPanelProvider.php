@@ -81,7 +81,8 @@ class AppPanelProvider extends PanelProvider
             ->authGuard('web')
             ->topNavigation()
             ->userMenuItems([
-                'profile' => MenuItem::make()->label('Edit profile'),
+                MenuItem::make()->label('Edit profile')
+                    ->url(fn(): string => EditProfile::getUrl()),
             ])
             ->navigationItems([
                 NavigationItem::make('Rules')
