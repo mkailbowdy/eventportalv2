@@ -20,6 +20,7 @@
 </head>
 
 <body class="antialiased">
+
 {{ $slot }}
 
 @filamentScripts

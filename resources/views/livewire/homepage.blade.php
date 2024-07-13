@@ -123,4 +123,5 @@
             </dl>
         </div>
     </div>
+    <livewire:termsandconditions/>
 </div>

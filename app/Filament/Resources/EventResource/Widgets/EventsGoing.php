@@ -43,7 +43,7 @@ class EventsGoing extends BaseWidget
             ])
             ->recordUrl(
                 function (Model $record): string {
-                    return '../events/'.$record->id;
+                    return '../app/events/'.$record->id;
 //                    return route('users.view', ['record' => $record]);
                 },
             )
