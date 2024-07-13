@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Section as InfolistSection;
 
 
-class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasFactory, Notifiable;
 
