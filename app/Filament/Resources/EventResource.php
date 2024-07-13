@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
 class EventResource extends Resource
 {
     protected static ?string $model = Event::class;
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
 //    protected static ?string $navigationLabel = 'All Events';
 //    protected static ?string $navigationIcon = 'heroicon-o-user-group';

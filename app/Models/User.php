@@ -8,6 +8,8 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Infolists\Components\Section as InfolistSection;
 
 
-class User extends Authenticatable implements FilamentUser, HasAvatar
+class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
@@ -48,6 +50,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
         static::created(function ($user) {
             $user->avatar_url = 'https://ui-avatars.com/api/?name='.urlencode($user->name);
             $user->save();
+            event(new Registered($user));
         });
     }
 

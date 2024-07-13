@@ -12,6 +12,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
+use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -51,7 +52,6 @@ class AppPanelProvider extends PanelProvider
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
-            ->defaultThemeMode(ThemeMode::Dark)
             ->font('Poppins')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -83,8 +83,15 @@ class AppPanelProvider extends PanelProvider
             ->userMenuItems([
                 'profile' => MenuItem::make()->label('Edit profile'),
             ])
+            ->navigationItems([
+                NavigationItem::make('Rules')
+                    ->url('/rules', shouldOpenInNewTab: true)
+                    ->icon('heroicon-m-scale')
+                    ->sort(3),
+            ])
             // https://filamentphp.com/docs/3.x/panels/users
-            ->profile(EditProfile::class);
+            ->profile(EditProfile::class)
+            ->emailVerification();
 
 //            ->userMenuItems([
 //                MenuItem::make()

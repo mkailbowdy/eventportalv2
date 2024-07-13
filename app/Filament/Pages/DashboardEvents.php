@@ -9,6 +9,8 @@ use Filament\Pages\Dashboard;
 
 class DashboardEvents extends Dashboard
 {
+    protected static ?string $navigationIcon = 'heroicon-o-home';
+
     protected function getHeaderWidgets(): array
     {
         return [
