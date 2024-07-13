@@ -208,7 +208,7 @@
                         <button type="button" class="flex w-full items-start justify-between"
                                 aria-controls="section-6" aria-expanded="false">
                             <span
-                                class="text-base font-semibold leading-7">Modification and Termination of Services</span>
+                                class="text-base font-semibold leading-7">Termination of Services</span>
                             <span class="ml-6 flex h-7 items-center">
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                      aria-hidden="true">
