@@ -10,11 +10,9 @@ class EditEvent extends EditRecord
 {
     protected static string $resource = EventResource::class;
 
-    public static function getRelations(): array
+    public function getRelationManagers(): array
     {
-        return [
-//            RelationManagers\CommentsRelationManager::class,
-        ];
+        return [];
     }
 
     protected function getHeaderActions(): array
