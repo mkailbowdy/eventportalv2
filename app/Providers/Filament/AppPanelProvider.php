@@ -12,6 +12,7 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationItem;
 use Filament\Pages;
+use App\Filament\Pages\Auth\Register;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -39,10 +40,10 @@ class AppPanelProvider extends PanelProvider
             ->unsavedChangesAlerts()
             ->brandName('ibento')
             ->login()
-            ->registration()
+            ->registration(Register::class)
             ->passwordReset()
             ->emailVerification()
-            ->profile()
+            ->profile(EditProfile::class)
             ->viteTheme('resources/css/filament/app/theme.css')
             ->colors([
                 'danger' => Color::Rose,
@@ -88,9 +89,8 @@ class AppPanelProvider extends PanelProvider
                     ->url('/rules', shouldOpenInNewTab: true)
                     ->icon('heroicon-m-scale')
                     ->sort(3),
-            ])
-            // https://filamentphp.com/docs/3.x/panels/users
-            ->profile(EditProfile::class);
+            ]);
+        // https://filamentphp.com/docs/3.x/panels/users
 //            ->emailVerification();
 
 //            ->userMenuItems([
