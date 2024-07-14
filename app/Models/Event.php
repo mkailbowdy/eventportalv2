@@ -233,9 +233,9 @@ class Event extends Model implements HasMedia
                     TextEntry::make('name'),
                     ImageEntry::make('featured_image')
                         ->label(false)
-                        ->width(600)
-                        ->height(600)
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->width('100%')
+                        ->height('10%'),
                     TextEntry::make('description')
                         ->html()
                         ->columnSpanFull(),
