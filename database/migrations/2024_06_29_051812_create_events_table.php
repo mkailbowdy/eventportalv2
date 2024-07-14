@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->unsignedInteger('capacity');
             $table->string('prefecture');
             $table->string('meeting_spot');
-            $table->unsignedInteger('owner_id');
+            $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');
             $table->text('featured_image')->nullable();
             $table->text('event_gallery')->nullable();
             $table->timestamps();
