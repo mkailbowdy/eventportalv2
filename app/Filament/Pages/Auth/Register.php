@@ -26,7 +26,7 @@ class Register extends BaseRegister
                         DatePicker::make('date_of_birth')
                             ->label('Date of Birth')
                             ->native(false)
-                            ->default(now()->subYears(18))
+                            ->placeholder('Jan 1, 1996')
                             ->minDate(now()->subYears(100))
                             ->maxDate(now()->subYears(18))
                             ->helperText('Must be over 18 years old to register')
