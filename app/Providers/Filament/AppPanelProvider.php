@@ -42,6 +42,7 @@ class AppPanelProvider extends PanelProvider
             ->login()
             ->registration(Register::class)
             ->passwordReset()
+            ->emailVerification()
             ->profile(EditProfile::class)
             ->viteTheme('resources/css/filament/app/theme.css')
             ->colors([

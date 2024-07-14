@@ -10,7 +10,7 @@ Route::view('/maps', 'maps');
 Route::get('/', Homepage::class);
 Route::get('/rules', Termsandconditions::class);
 
-//Route::get('/testroute', function () {
-//    $name = "Funny Coder";
-//    Mail::to('myhkail.mendoza@gmail.com')->send(new MyTestEmail($name));
-//});
+Route::get('/testroute', function () {
+    $name = "Funny Coder";
+    Mail::to('myhkail.mendoza@gmail.com')->send(new MyTestEmail($name));
+});

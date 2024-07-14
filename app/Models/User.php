@@ -20,7 +20,7 @@ use Filament\Infolists\Components\Section as InfolistSection;
 use Illuminate\Support\Facades\Storage;
 
 
-class User extends Authenticatable implements FilamentUser, HasAvatar
+class User extends Authenticatable implements FilamentUser, HasAvatar, MustVerifyEmail
 {
     use HasFactory, Notifiable;
 
