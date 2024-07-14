@@ -3,10 +3,7 @@
 namespace App\Filament\Pages\Auth;
 
 use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Component;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
 use Filament\Pages\Auth\Register as BaseRegister;
 use Illuminate\Support\HtmlString;
 
@@ -33,6 +30,7 @@ class Register extends BaseRegister
                             ->required(),
                         Checkbox::make('agree_to_terms')
                             ->label(new HtmlString("I have read the <a href='/rules'><span class='text-red-500 font-bold underline'>Community Guidelines</span></a> and agree to follow and abide by the terms stated"))
+                            ->required()
                     ])
                     ->statePath('data'),
             ),
