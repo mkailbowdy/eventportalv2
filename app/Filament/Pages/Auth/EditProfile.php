@@ -91,7 +91,9 @@ class EditProfile extends BaseEditProfile
                     ->label('Location'),
                 $this->getPasswordFormComponent(),
                 $this->getPasswordConfirmationFormComponent(),
-                DatePicker::make('date_of_birth'),
+                DatePicker::make('date_of_birth')
+                    ->label('Date of Birth')
+                    ->maxDate(now()->subYears(18))
             ]);
     }
 }
