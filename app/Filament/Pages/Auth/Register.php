@@ -27,7 +27,7 @@ class Register extends BaseRegister
                             ->label('Date of Birth')
                             ->native(false)
                             ->minDate(now()->subYears(150))
-                            ->minDate(now()->subYears(18))
+                            ->maxDate(now()->subYears(18))
                             ->helperText('Must be over 18 years old to register')
                             ->required(),
                         Checkbox::make('agree_to_terms')
