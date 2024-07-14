@@ -73,7 +73,7 @@ class Event extends Model implements HasMedia
     {
         return [
             Section::make('Event')
-                ->description(new HtmlString('Please be sure to read <a href="/"><strong>Event Post Guidelines</strong></a> before uploading an event.'))
+                ->description(new HtmlString('Please be sure to read <a href="/"><span class="text-red-500 font-bold underline">Event Post Guidelines</a> before uploading an event.'))
                 ->columns(2)
                 ->schema([
                     TextInput::make('name')
