@@ -28,7 +28,7 @@ class Register extends BaseRegister
                             ->maxDate(now()->subYears(18))
                             ->helperText('Must be over 18 years old to register')
                             ->required(),
-                        Checkbox::make('agree_to_terms')
+                        Checkbox::make('agree')
                             ->label(new HtmlString("I have read the <a href='/rules'><span class='text-red-500 font-bold underline'>Community Guidelines</span></a> and agree to follow and abide by the terms stated"))
                             ->required()
                     ])

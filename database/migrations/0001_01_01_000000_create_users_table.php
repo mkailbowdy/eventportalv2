@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('avatar_url')->nullable();
             $table->text('bio')->nullable();
             $table->string('location')->nullable();
+            $table->boolean('agree')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
