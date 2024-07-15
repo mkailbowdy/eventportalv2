@@ -45,12 +45,14 @@ class AppPanelProvider extends PanelProvider
             ->profile(EditProfile::class)
             ->viteTheme('resources/css/filament/app/theme.css')
             ->colors([
-                'danger' => Color::Rose,
-                'gray' => Color::Gray,
-                'info' => Color::Blue,
-                'primary' => Color::Indigo,
-                'success' => Color::Emerald,
-                'warning' => Color::Orange,
+                'primary' => Color::Teal,
+                'secondary' => Color::Fuchsia,
+                'accent' => Color::Amber,
+                'success' => Color::Lime,
+                'warning' => Color::Yellow,
+                'danger' => Color::Red,
+                'info' => Color::Sky,
+                'gray' => Color::Slate,
             ])
             ->font('Poppins')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
