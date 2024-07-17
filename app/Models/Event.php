@@ -251,6 +251,9 @@ class Event extends Model implements HasMedia
                         ->helperText(function ($record) {
                             $count = Str::of($record->users()->wherePivot('participation_status',
                                 1)->count())->toString();
+                            if ($count <= 1) {
+                                return $count.' person going';
+                            }
                             return $count.' people going';
                         }),
                     ImageEntry::make('owner.avatar_url')
@@ -323,6 +326,7 @@ class Event extends Model implements HasMedia
                         ->dateTime('M j, Y'),
                     TextColumn::make('start_time')
                         ->dateTime('H:i'),
+
 //                    IconColumn::make('participation_status')
 //                        ->boolean()
 //                        ->trueIcon('heroicon-o-check-circle')
