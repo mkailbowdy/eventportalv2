@@ -54,6 +54,10 @@ class EventResource extends Resource
     {
         return $table
             ->columns(Event::getTheTable())
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
+            ])
             ->defaultSort('date', 'start_time')
             ->filters([
                 Filter::make('date')

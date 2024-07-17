@@ -35,7 +35,7 @@ class Homepage extends Component implements HasForms, HasTable
     {
         return $table
             ->contentGrid([
-                'md' => 3,
+                'md' => 2,
             ])
             ->query(Event::query()->with(['owner', 'users']))
             ->columns([

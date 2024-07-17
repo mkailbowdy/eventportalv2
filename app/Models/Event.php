@@ -19,8 +19,12 @@ use Filament\Forms\Components\View;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Enums\ActionSize;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Layout\Grid;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -288,26 +292,41 @@ class Event extends Model implements HasMedia
     public static function getTheTable(): array
     {
         return [
-            ImageColumn::make('featured_image')
-                ->label(false)
-                ->square()->height(150)->width(100),
-            TextColumn::make('name')
-                ->searchable()
-                ->wrap()
-                ->limit(100),
-            TextColumn::make('date')
-                ->dateTime('M j, Y'),
-            TextColumn::make('start_time')
-                ->dateTime('H:i'),
-            IconColumn::make('participation_status')
-                ->boolean()
-                ->trueIcon('heroicon-o-check-circle')
-                ->falseIcon(false)
-                ->label('Participating')
-                ->getStateUsing(function (Event $record) {
-                    return $record->users()->where('user_id',
-                        auth()->id())->first()?->pivot->participation_status ?? false;
-                }),
+            Split::make([
+                ImageColumn::make('featured_image')
+                    ->size(200),
+                Stack::make([
+                    TextColumn::make('name')
+                        ->weight(FontWeight::Bold)
+                        ->searchable()
+                        ->sortable(),
+                    TextColumn::make('phone')
+                        ->icon('heroicon-m-phone'),
+                    TextColumn::make('email')
+                        ->icon('heroicon-m-envelope'),
+                    TextColumn::make('date')
+                        ->dateTime('M j, Y'),
+                    TextColumn::make('start_time')
+                        ->dateTime('H:i'),
+//                    IconColumn::make('participation_status')
+//                        ->boolean()
+//                        ->trueIcon('heroicon-o-check-circle')
+//                        ->falseIcon(false)
+//                        ->label('Participating')
+//                        ->getStateUsing(function (Event $record) {
+//                            return $record->users()->where('user_id',
+//                                auth()->id())->first()?->pivot->participation_status ?? false;
+//                        }),
+                ]),
+            ]),
+//            ImageColumn::make('featured_image')
+//                ->label(false)
+//                ->square()->height(150)->width(100),
+//            TextColumn::make('name')
+//                ->searchable()
+//                ->wrap()
+//                ->limit(100),
+
         ];
     }
 
