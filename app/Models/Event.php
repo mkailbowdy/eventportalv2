@@ -19,6 +19,7 @@ use Filament\Forms\Components\View;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Enums\ActionSize;
+use Filament\Support\Enums\Alignment;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
@@ -33,6 +34,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Filament\Infolists\Components\Section as InfolistSection;
@@ -238,20 +240,33 @@ class Event extends Model implements HasMedia
                         ->label(false)
                         ->columnSpanFull()
                         ->width('100%')
-                        ->height('10%'),
+                        ->height('1%'),
                     TextEntry::make('description')
                         ->html()
                         ->columnSpanFull(),
                     TextEntry::make('meeting_spot'),
                     TextEntry::make('prefecture'),
                     TextEntry::make('category'),
-                    TextEntry::make('capacity'),
-                    ImageEntry::make('event_creator_avatar')
-                        ->label('Organizer')
+                    TextEntry::make('capacity')
+                        ->helperText(function ($record) {
+                            $count = Str::of($record->users()->wherePivot('participation_status',
+                                1)->count())->toString();
+                            return $count.' people going';
+                        }),
+                    ImageEntry::make('owner.avatar_url')
+                        ->defaultImageUrl(function ($record) {
+                            $firstLetter = substr($record->owner->name, 0, 1);
+                            $avatarUrlIsNull = 'https://ui-avatars.com/api/?name='.urlencode($firstLetter).'&color=FFFFFF&background=030712';
+                            return $record->avatar_url ?? $avatarUrlIsNull;
+                        })
+                        ->helperText(function ($record) {
+                            return $record->owner->name;
+                        })
+                        ->label('Host')
                         ->circular()
                         ->stacked()
-                        ->limit(3)
-                        ->limitedRemainingText(),
+                        ->limitedRemainingText()
+                        ->grow(false),
                     TextEntry::make('participation_status_label')
                         ->columnSpanFull()
                         ->label('Your Participation Status')
@@ -317,7 +332,7 @@ class Event extends Model implements HasMedia
 //                            return $record->users()->where('user_id',
 //                                auth()->id())->first()?->pivot->participation_status ?? false;
 //                        }),
-                ]),
+                ])->alignment(Alignment::Center),
             ]),
 //            ImageColumn::make('featured_image')
 //                ->label(false)
