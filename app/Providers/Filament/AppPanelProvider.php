@@ -90,7 +90,8 @@ class AppPanelProvider extends PanelProvider
                     ->url('/rules', shouldOpenInNewTab: true)
                     ->icon('heroicon-m-scale')
                     ->sort(3),
-            ]);
+            ])
+            ->viteTheme('resources/css/filament/admin/theme.css');
         // https://filamentphp.com/docs/3.x/panels/users
 //            ->emailVerification();
 

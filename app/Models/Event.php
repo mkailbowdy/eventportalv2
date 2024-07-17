@@ -121,7 +121,6 @@ class Event extends Model implements HasMedia
                         ->native(false)
                         ->seconds(false),
                 ]),
-
             Section::make('Where')
                 ->columns(2)
                 ->schema([

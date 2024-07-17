@@ -1,6 +1,6 @@
 <div class="bg-white">
     <div class="relative isolate px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl py-16 sm:py-16 lg:py-16">
+        <div class="mx-auto max-w-2xl py-3 sm:py-3 lg:py-3">
             <div class="hidden sm:mb-8 sm:flex sm:justify-center">
                 <div
                     class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
@@ -21,21 +21,21 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center py-12">
-                <div class="pb-6">
-                    <h2 class="text-lg font-bold">Try it out!</h2>
-                    <p><a href="/app" class="text-sm font-semibold leading-6 text-indigo-500">Sign in</a> to see events
-                        in
-                        detail and participate in the fun</p>
+            <div class="text-center pt-8">
+                <div>
+                    <h2 class="text-lg font-bold">Give it a try! Use filters to find an event by prefecture and by
+                        category.</h2>
                 </div>
-                {{$this->table}}
             </div>
         </div>
     </div>
     <div class="bg-white">
-        <div class="mx-auto max-w-7xl divide-y divide-gray-900/10 px-6 lg:px-8 mb-20">
-            <h2 class="text-2xl font-bold leading-10 tracking-tight text-gray-900">Frequently asked questions</h2>
-            <dl class="mt-10 space-y-8 divide-y divide-gray-900/10">
+        <div class="mx-auto max-w-7xl divide-gray-900/10 px-6 lg:px-8 mb-20">
+            <div class="py-8">
+                {{$this->table}}
+            </div>
+            <h2 class="text-3xl font-bold leading-10 tracking-tight text-gray-900">Frequently asked questions</h2>
+            <dl class="space-y-8 divide-y divide-gray-900/10">
                 <div class="pt-8 lg:grid lg:grid-cols-12 lg:gap-8">
                     <dt class="text-base font-semibold leading-7 text-gray-900 lg:col-span-5">What are the rules for
                         hosting and posting events?

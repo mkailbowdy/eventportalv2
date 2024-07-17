@@ -101,7 +101,12 @@ class User extends Authenticatable implements FilamentUser, HasAvatar
                     ImageEntry::make('avatar_url')
                         ->label(false)
                         ->circular()
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->defaultImageUrl(function ($record) {
+                            $firstLetter = substr($record->name, 0, 1);
+                            $avatarUrlIsNull = 'https://ui-avatars.com/api/?name='.urlencode($firstLetter).'&color=FFFFFF&background=030712';
+                            return $record->avatar_url ?? $avatarUrlIsNull;
+                        }),
                     TextEntry::make('name'),
                     TextEntry::make('bio')
                         ->label('Hobbies and interests'),
